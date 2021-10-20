@@ -1,0 +1,45 @@
+<RCC>
+  <qresource prefix="icons">
+    <file>icons8-search-50.png</file>
+    <file>EPSON.png</file>
+    <file>BROTHER_active.png</file>
+    <file>AA_ΠΕΛΑΤΕΣ.png</file>
+    <file>add_files.png</file>
+    <file>Background.png</file>
+    <file>BROTHER.png</file>
+    <file>CANON.png</file>
+    <file>checkbox.jpg</file>
+    <file>checkbox.jpg_Zone.Identifier</file>
+    <file>delete_all.jpg</file>
+    <file>delete_all.jpg_Zone.Identifier</file>
+    <file>delete_all.png</file>
+    <file>delete_selected.png</file>
+    <file>kisspng-logo-konica-minolta-business-solutions-deutschland-piag-presents-impress-2-16-showcase-print-celeb-5baa3dd616f482.553684961537883606094.png</file>
+    <file>kisspng-logo-sharp-corporation-brand-fax-aussie-managed-print-services-kraft-business-systems-5beff2a0458d99.0143097615424518722849.png</file>
+    <file>KONICA.png</file>
+    <file>KYOCERA.png</file>
+    <file>LEXMARK.png</file>
+    <file>OKI.png</file>
+    <file>pdf.png</file>
+    <file>RICOH.png</file>
+    <file>SAMSUNG.png</file>
+    <file>SHARP.png</file>
+    <file>view_files.png</file>
+    <file>ΜΕΛΑΝΑΚΙΑ.png</file>
+    <file>ΜΕΛΑΝΟΤΑΙΝΙΕΣ.BACK.png</file>
+    <file>ΜΕΛΑΝΟΤΑΙΝΙΕΣ.jpg</file>
+    <file>ΜΕΛΑΝΟΤΑΙΝΙΕΣ.png</file>
+    <file>ΜΕΛΛΑΝΑΚΙΑ.png</file>
+    <file>ΤΟΝΕΡ.BACK.png</file>
+    <file>ΤΟΝΕΡ.png</file>
+    <file>ΦΩΤΟΤΥΠΙΚΑ.png</file>
+    <file>Ω_ΠΑΡΑΓΓΕΛΙΕΣ.png</file>
+  </qresource>
+  <qresource prefix="images">
+    <file>AA_ΠΕΛΑΤΕΣ.png</file>
+    <file>python3.webp</file>
+  </qresource>
+  <qresource prefix="spare_parts">
+    <file>../SpareParts_images/BROTHER/1/AA_ΠΕΛΑΤΕΣ.png</file>
+  </qresource>
+</RCC>
