@@ -7,7 +7,7 @@ today_obj = datetime.today()
 today = datetime.today().strftime('%d/%m/%Y')
 now = datetime.now()
 now_str = now.strftime("%H-%M-%S")
-VERSION = "V 1.0.0"
+VERSION = "V 1.0.1"
 log_dir = "logs" + "/" + today.replace("/", "_") + "/"
 
 if not os.path.exists(log_dir):
@@ -20,7 +20,7 @@ else:
     # ML Shop dbases
     DB = "\\\\192.168.1.200\\Public\\GOOGLE-DRIVE\\ΕΓΓΡΑΦΑ\\2.  ΑΠΟΘΗΚΗ\\3. ΚΑΙΝΟΥΡΙΑ_ΑΠΟΘΗΚΗ.db"
 
-DB = "3. ΚΑΙΝΟΥΡΙΑ_ΑΠΟΘΗΚΗ.db"
+# DB = "3. ΚΑΙΝΟΥΡΙΑ_ΑΠΟΘΗΚΗ.db"
 BASE_DIR = os.path.dirname(os.path.abspath(DB))
 SPARE_PARTS_ROOT = os.path.join(BASE_DIR, "SpareParts_images/")
 

@@ -11,6 +11,8 @@
 ##############################################################################################
 
 # todo    ελεγχος αν υπάρχουν δυπλα part no και κωδικοί
+# Version = 1.0.1 Change Colors and fix Search
+# Version = 1.0.0 All ready
 # VERSION = "V 0.4.1"  Κλείνει τα παραθυρα με Esc
 # VERSION = "V 0.3.1"  Μελανοταινίες ready και κουμπια διαγραφών παραγγελιών
 # VERSION = "V 0.2.1"  Consumables ready
@@ -573,13 +575,17 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
                                          item.ΠΕΡΙΓΡΑΦΗ, item.ΚΩΔΙΚΟΣ, item.ΤΕΜΑΧΙΑ, item.ΤΙΜΗ, item.ΣΥΝΟΛΟ,
                                          item.ΣΕΛΙΔΕΣ, item.ΠΕΛΑΤΕΣ, item.ΠΑΡΑΤΗΡΗΣΗΣ])
             if "C/M/Y" in item.ΠΕΡΙΓΡΑΦΗ:
-                self.qitem.setForeground(4, QtGui.QColor('green'))
+                self.qitem.setBackground(4, QtGui.QColor('green'))
+                self.qitem.setForeground(4, QtGui.QColor('white'))
             elif "CYAN" in item.ΠΕΡΙΓΡΑΦΗ:
-                self.qitem.setForeground(4, QtGui.QColor('BLUE'))
+                self.qitem.setBackground(4, QtGui.QColor('#0517D2'))
+                self.qitem.setForeground(4, QtGui.QColor('white'))
             elif "MAGENTA" in item.ΠΕΡΙΓΡΑΦΗ:
-                self.qitem.setForeground(4, QtGui.QColor('magenta'))
+                self.qitem.setBackground(4, QtGui.QColor('D205CF'))
+                self.qitem.setForeground(4, QtGui.QColor('white'))
             elif "YELLOW" in item.ΠΕΡΙΓΡΑΦΗ:
-                self.qitem.setForeground(4, QtGui.QColor('orange'))
+                self.qitem.setBackground(4, QtGui.QColor('yellow'))
+                self.qitem.setForeground(4, QtGui.QColor('black'))
             elif "GRAY" in item.ΠΕΡΙΓΡΑΦΗ:
                 self.qitem.setBackground(4, QtGui.QColor("gray"))
                 self.qitem.setForeground(4, QtGui.QColor('white'))
@@ -656,83 +662,86 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
         self.search_line_edit.clear()
         self.treeWidget.clear()
         for index, item in enumerate(self.data_to_show):
-            list_of_item = list(str(item).split(" "))
-            for sub_item in list_of_item:
-                if text_to_search.lower() in sub_item.lower():
-                    # ΠΑΡΑΓΓΕΛΙΕΣ
-                    if self.selected_table_label.text() == "ΠΑΡΑΓΓΕΛΙΕΣ":
-                        self.qitem = QTreeWidgetItem(self.treeWidget,
-                                                     [str(item.ID), str(item.ΚΩΔΙΚΟΣ), item.ΗΜΕΡΟΜΗΝΙΑ,
-                                                      str(item.ΠΕΡΙΓΡΑΦΗ),
-                                                      str(item.ΑΠΟΤΕΛΕΣΜΑ), item.ΠΑΡΑΤΗΡΗΣΕΙΣ])
-                        self.treeWidget.addTopLevelItem(self.qitem)
-                        self.treeWidget.setColumnWidth(3, 500)
-                        self.treeWidget.resizeColumnToContents(index)
-                        # Για να μήν ψάχνει το ιδιο string στα επομενα πεδια του ιδου προιόντος
-                        # πχ αν βρει την λεξει "brother" στο πεδιο ΠΕΡΙΓΡΑΦΗ αν το αφήσουμε να ψαξει και στις
-                        # ΠΑΡΑΤΗΡΗΣΕΙΣ θα μας βγαλει δυο φορές το ιδιο προιόν στο treeWidget
-                        # για αυτο κανουμε break το εσωτρεικό loop
-                        break
-                        # ΜΕΛΑΝΑΚΙΑ + ΤΟΝΕΡ
-                    elif self.selected_table_label.text() == "ΜΕΛΑΝΑΚΙΑ" or self.selected_table_label.text() == "ΤΟΝΕΡ" \
-                            or self.selected_table_label.text() == "ΦΩΤΟΤΥΠΙΚΑ":
-                        self.qitem = QTreeWidgetItem(self.treeWidget,
-                                                     [str(item.ID), str(item.ΕΤΑΙΡΕΙΑ), item.ΠΟΙΟΤΗΤΑ,
-                                                      str(item.ΑΝΑΛΩΣΙΜΟ),
-                                                      str(item.ΠΕΡΙΓΡΑΦΗ), item.ΚΩΔΙΚΟΣ, item.ΤΕΜΑΧΙΑ, item.ΤΙΜΗ,
-                                                      item.ΣΥΝΟΛΟ,
-                                                      item.ΣΕΛΙΔΕΣ, item.ΠΕΛΑΤΕΣ, item.ΠΑΡΑΤΗΡΗΣΗΣ])
-                        if "C/M/Y" in item.ΠΕΡΙΓΡΑΦΗ:
-                            self.qitem.setForeground(4, QtGui.QColor('green'))
-                        elif "CYAN" in item.ΠΕΡΙΓΡΑΦΗ:
-                            self.qitem.setForeground(4, QtGui.QColor('BLUE'))
-                        elif "MAGENTA" in item.ΠΕΡΙΓΡΑΦΗ:
-                            self.qitem.setForeground(4, QtGui.QColor('magenta'))
-                        elif "YELLOW" in item.ΠΕΡΙΓΡΑΦΗ:
-                            self.qitem.setForeground(4, QtGui.QColor('orange'))
-                        elif "GRAY" in item.ΠΕΡΙΓΡΑΦΗ:
-                            self.qitem.setBackground(4, QtGui.QColor("gray"))
-                            self.qitem.setForeground(4, QtGui.QColor('white'))
-                        elif "BLACK" in item.ΠΕΡΙΓΡΑΦΗ:
-                            self.qitem.setBackground(4, QtGui.QColor("black"))
-                            self.qitem.setForeground(4, QtGui.QColor('white'))
-                        self.treeWidget.addTopLevelItem(self.qitem)
-                        self.treeWidget.setColumnWidth(4, 500)
-                        self.treeWidget.resizeColumnToContents(index)
-                        # Για να μήν ψάχνει το ιδιο string στα επομενα πεδια του ιδου προιόντος
-                        # πχ αν βρει την λεξει "brother" στο πεδιο ΠΕΡΙΓΡΑΦΗ αν το αφήσουμε να ψαξει και στις
-                        # ΠΑΡΑΤΗΡΗΣΕΙΣ θα μας βγαλει δυο φορές το ιδιο προιόν στο treeWidget
-                        # για αυτο κανουμε break το εσωτρεικό loop
-                        break
-                        # ΜΕΛΑΝΟΤΑΙΝΙΕΣ
-                    elif self.selected_table_label.text() == "ΜΕΛΑΝΟΤΑΙΝΙΕΣ":
-                        self.qitem = QTreeWidgetItem(self.treeWidget,
-                                                     [str(item.ID), str(item.ΕΤΑΙΡΕΙΑ), item.ΠΟΙΟΤΗΤΑ,
-                                                      str(item.ΑΝΑΛΩΣΙΜΟ),
-                                                      str(item.ΠΕΡΙΓΡΑΦΗ), item.ΚΩΔΙΚΟΣ, item.ΤΕΜΑΧΙΑ, item.ΤΙΜΗ,
-                                                      item.ΣΥΝΟΛΟ,
-                                                      item.ΠΕΛΑΤΕΣ, item.ΠΑΡΑΤΗΡΗΣΗΣ])
-                        self.treeWidget.addTopLevelItem(self.qitem)
-                        self.treeWidget.setColumnWidth(4, 500)
-                        self.treeWidget.resizeColumnToContents(index)
-                        # Για να μήν ψάχνει το ιδιο string στα επομενα πεδια του ιδου προιόντος
-                        # πχ αν βρει την λεξει "brother" στο πεδιο ΠΕΡΙΓΡΑΦΗ αν το αφήσουμε να ψαξει και στις
-                        # ΠΑΡΑΤΗΡΗΣΕΙΣ θα μας βγαλει δυο φορές το ιδιο προιόν στο treeWidget
-                        # για αυτο κανουμε break το εσωτρεικό loop
-                        break
-                    else:
-                        self.qitem = QTreeWidgetItem(self.treeWidget,
-                                                     [str(item.ID), str(item.PARTS_NR), item.ΠΕΡΙΓΡΑΦΗ,
-                                                      str(item.ΚΩΔΙΚΟΣ),
-                                                      str(item.ΤΕΜΑΧΙΑ), item.ΠΑΡΑΤΗΡΗΣΗΣ])
-                        self.treeWidget.addTopLevelItem(self.qitem)
-                        self.treeWidget.setColumnWidth(2, 500)
-                        self.treeWidget.resizeColumnToContents(index)
-                        # Για να μήν ψάχνει το ιδιο string στα επομενα πεδια του ιδου προιόντος
-                        # πχ αν βρει την λεξει "brother" στο πεδιο ΠΕΡΙΓΡΑΦΗ αν το αφήσουμε να ψαξει και στις
-                        # ΠΑΡΑΤΗΡΗΣΕΙΣ θα μας βγαλει δυο φορές το ιδιο προιόν στο treeWidget
-                        # για αυτο κανουμε break το εσωτρεικό loop
-                        break
+            list_of_item = str(item).replace(" ", "")
+            if text_to_search.lower().replace(" ", "") in list_of_item.lower():
+                # ΠΑΡΑΓΓΕΛΙΕΣ
+                if self.selected_table_label.text() == "ΠΑΡΑΓΓΕΛΙΕΣ":
+                    self.qitem = QTreeWidgetItem(self.treeWidget,
+                                                 [str(item.ID), str(item.ΚΩΔΙΚΟΣ), item.ΗΜΕΡΟΜΗΝΙΑ,
+                                                  str(item.ΠΕΡΙΓΡΑΦΗ),
+                                                  str(item.ΑΠΟΤΕΛΕΣΜΑ), item.ΠΑΡΑΤΗΡΗΣΕΙΣ])
+                    self.treeWidget.addTopLevelItem(self.qitem)
+                    self.treeWidget.setColumnWidth(3, 500)
+                    self.treeWidget.resizeColumnToContents(index)
+                    # Για να μήν ψάχνει το ιδιο string στα επομενα πεδια του ιδου προιόντος
+                    # πχ αν βρει την λεξει "brother" στο πεδιο ΠΕΡΙΓΡΑΦΗ αν το αφήσουμε να ψαξει και στις
+                    # ΠΑΡΑΤΗΡΗΣΕΙΣ θα μας βγαλει δυο φορές το ιδιο προιόν στο treeWidget
+                    # για αυτο κανουμε break το εσωτρεικό loop
+                    # break
+                    # ΜΕΛΑΝΑΚΙΑ + ΤΟΝΕΡ
+                elif self.selected_table_label.text() == "ΜΕΛΑΝΑΚΙΑ" or self.selected_table_label.text() == "ΤΟΝΕΡ" \
+                        or self.selected_table_label.text() == "ΦΩΤΟΤΥΠΙΚΑ":
+                    self.qitem = QTreeWidgetItem(self.treeWidget,
+                                                 [str(item.ID), str(item.ΕΤΑΙΡΕΙΑ), item.ΠΟΙΟΤΗΤΑ,
+                                                  str(item.ΑΝΑΛΩΣΙΜΟ),
+                                                  str(item.ΠΕΡΙΓΡΑΦΗ), item.ΚΩΔΙΚΟΣ, item.ΤΕΜΑΧΙΑ, item.ΤΙΜΗ,
+                                                  item.ΣΥΝΟΛΟ,
+                                                  item.ΣΕΛΙΔΕΣ, item.ΠΕΛΑΤΕΣ, item.ΠΑΡΑΤΗΡΗΣΗΣ])
+                    if "C/M/Y" in item.ΠΕΡΙΓΡΑΦΗ:
+                        self.qitem.setBackground(4, QtGui.QColor('green'))
+                        self.qitem.setForeground(4, QtGui.QColor('white'))
+                    elif "CYAN" in item.ΠΕΡΙΓΡΑΦΗ:
+                        self.qitem.setBackground(4, QtGui.QColor('#0517D2'))
+                        self.qitem.setForeground(4, QtGui.QColor('white'))
+                    elif "MAGENTA" in item.ΠΕΡΙΓΡΑΦΗ:
+                        self.qitem.setBackground(4, QtGui.QColor('D205CF'))
+                        self.qitem.setForeground(4, QtGui.QColor('white'))
+                    elif "YELLOW" in item.ΠΕΡΙΓΡΑΦΗ:
+                        self.qitem.setBackground(4, QtGui.QColor('yellow'))
+                        self.qitem.setForeground(4, QtGui.QColor('black'))
+                    elif "GRAY" in item.ΠΕΡΙΓΡΑΦΗ:
+                        self.qitem.setBackground(4, QtGui.QColor("gray"))
+                        self.qitem.setForeground(4, QtGui.QColor('white'))
+                    elif "BLACK" in item.ΠΕΡΙΓΡΑΦΗ:
+                        self.qitem.setBackground(4, QtGui.QColor("black"))
+                        self.qitem.setForeground(4, QtGui.QColor('white'))
+                    self.treeWidget.addTopLevelItem(self.qitem)
+                    self.treeWidget.setColumnWidth(4, 500)
+                    self.treeWidget.resizeColumnToContents(index)
+                    # Για να μήν ψάχνει το ιδιο string στα επομενα πεδια του ιδου προιόντος
+                    # πχ αν βρει την λεξει "brother" στο πεδιο ΠΕΡΙΓΡΑΦΗ αν το αφήσουμε να ψαξει και στις
+                    # ΠΑΡΑΤΗΡΗΣΕΙΣ θα μας βγαλει δυο φορές το ιδιο προιόν στο treeWidget
+                    # για αυτο κανουμε break το εσωτρεικό loop
+                    # break
+                    # ΜΕΛΑΝΟΤΑΙΝΙΕΣ
+                elif self.selected_table_label.text() == "ΜΕΛΑΝΟΤΑΙΝΙΕΣ":
+                    self.qitem = QTreeWidgetItem(self.treeWidget,
+                                                 [str(item.ID), str(item.ΕΤΑΙΡΕΙΑ), item.ΠΟΙΟΤΗΤΑ,
+                                                  str(item.ΑΝΑΛΩΣΙΜΟ),
+                                                  str(item.ΠΕΡΙΓΡΑΦΗ), item.ΚΩΔΙΚΟΣ, item.ΤΕΜΑΧΙΑ, item.ΤΙΜΗ,
+                                                  item.ΣΥΝΟΛΟ,
+                                                  item.ΠΕΛΑΤΕΣ, item.ΠΑΡΑΤΗΡΗΣΗΣ])
+                    self.treeWidget.addTopLevelItem(self.qitem)
+                    self.treeWidget.setColumnWidth(4, 500)
+                    self.treeWidget.resizeColumnToContents(index)
+                    # Για να μήν ψάχνει το ιδιο string στα επομενα πεδια του ιδου προιόντος
+                    # πχ αν βρει την λεξει "brother" στο πεδιο ΠΕΡΙΓΡΑΦΗ αν το αφήσουμε να ψαξει και στις
+                    # ΠΑΡΑΤΗΡΗΣΕΙΣ θα μας βγαλει δυο φορές το ιδιο προιόν στο treeWidget
+                    # για αυτο κανουμε break το εσωτρεικό loop
+                    # break
+                else:
+                    self.qitem = QTreeWidgetItem(self.treeWidget,
+                                                 [str(item.ID), str(item.PARTS_NR), item.ΠΕΡΙΓΡΑΦΗ,
+                                                  str(item.ΚΩΔΙΚΟΣ),
+                                                  str(item.ΤΕΜΑΧΙΑ), item.ΠΑΡΑΤΗΡΗΣΗΣ])
+                    self.treeWidget.addTopLevelItem(self.qitem)
+                    self.treeWidget.setColumnWidth(2, 500)
+                    self.treeWidget.resizeColumnToContents(index)
+                    # Για να μήν ψάχνει το ιδιο string στα επομενα πεδια του ιδου προιόντος
+                    # πχ αν βρει την λεξει "brother" στο πεδιο ΠΕΡΙΓΡΑΦΗ αν το αφήσουμε να ψαξει και στις
+                    # ΠΑΡΑΤΗΡΗΣΕΙΣ θα μας βγαλει δυο φορές το ιδιο προιόν στο treeWidget
+                    # για αυτο κανουμε break το εσωτρεικό loop
+                    # break
 
     def show_edit_spare_part_window(self, item, column):  # column ειναι η στήλη που πατησε κλικ
         item_id = item.text(0)  # item.text(0)  == ID
