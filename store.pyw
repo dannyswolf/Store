@@ -694,7 +694,7 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
                         self.qitem.setBackground(4, QtGui.QColor('#0517D2'))
                         self.qitem.setForeground(4, QtGui.QColor('white'))
                     elif "MAGENTA" in item.ΠΕΡΙΓΡΑΦΗ:
-                        self.qitem.setBackground(4, QtGui.QColor('D205CF'))
+                        self.qitem.setBackground(4, QtGui.QColor('#D205CF'))
                         self.qitem.setForeground(4, QtGui.QColor('white'))
                     elif "YELLOW" in item.ΠΕΡΙΓΡΑΦΗ:
                         self.qitem.setBackground(4, QtGui.QColor('yellow'))
