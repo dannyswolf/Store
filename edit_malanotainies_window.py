@@ -118,6 +118,7 @@ class Ui_edit_melanotainies_window(QtWidgets.QMainWindow):  # Πρέπει να 
         self.gridLayout.addWidget(self.total_label, 10, 0, 1, 1)
         self.total_lineEdit = QtWidgets.QLineEdit(edit_melanotainies_window)
         self.total_lineEdit.setObjectName("total_lineEdit")
+        self.total_lineEdit.setReadOnly(True)
         self.gridLayout.addWidget(self.total_lineEdit, 11, 0, 1, 1)
         # Παρατηρήσης
         self.comments_label = QtWidgets.QLabel(edit_melanotainies_window)
@@ -501,18 +502,15 @@ class Ui_edit_melanotainies_window(QtWidgets.QMainWindow):  # Πρέπει να 
                 pieces = "0"
             else:
                 pieces = self.pieces_lineEdit.text()
+            price = self.price_lineEdit.text()
+            price = "{:.2f}".format(float(price.replace("€", ""))) + " €"
             try:
                 total = int(pieces) * int(
                     float(self.price_lineEdit.text().replace(" €", "").strip()))
                 total = f"{total:.2f} €"
             except ValueError:
                 total = "0.00 €"
-            price = self.price_lineEdit.text()
-            if "€" not in price:
-                try:
-                    price = f"{price:.f}" + " €"
-                except ValueError:
-                    price = "0.00 €"
+
             if self.item is None:
                 # Φτιάχνουμε νέο object
                 self.item = self.selected_table(ΕΤΑΙΡΕΙΑ=self.company_lineEdit.text(),

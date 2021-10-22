@@ -11,6 +11,7 @@
 ##############################################################################################
 
 # todo    ελεγχος αν υπάρχουν δυπλα part no και κωδικοί
+# Version = 1.0.2 Fix Prices and Readonly Total
 # Version = 1.0.1 Change Colors and fix Search
 # Version = 1.0.0 All ready
 # VERSION = "V 0.4.1"  Κλείνει τα παραθυρα με Esc
