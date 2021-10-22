@@ -303,7 +303,6 @@ class Ui_edit_consumables_window(QtWidgets.QMainWindow):   # Πρέπει να �
 
         # Show images
         self.images_path = os.path.join(SPARE_PARTS_ROOT, f"{self.selected_table.__tablename__}", f"{self.selected_id}")
-        print("self.images_path", self.images_path)
         if os.path.exists(self.images_path):
             self.files = os.listdir(self.images_path)
 
