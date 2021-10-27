@@ -11,6 +11,7 @@
 ##############################################################################################
 
 # todo    ελεγχος αν υπάρχουν δυπλα part no και κωδικοί
+# Version = 1.0.4 Χρώματα στις παραγγελίες και πολλαπλά παράθυρα
 # Version = 1.0.3 Fix Prices with "," and multiple windows in consumables
 # Version = 1.0.2 Fix Prices and Readonly Total
 # Version = 1.0.1 Change Colors and fix Search
@@ -634,6 +635,24 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
             self.qitem = TreeWidgetItem(self.treeWidget,
                                         [str(item.ID), str(item.ΚΩΔΙΚΟΣ), item.ΗΜΕΡΟΜΗΝΙΑ, str(item.ΠΕΡΙΓΡΑΦΗ),
                                          str(item.ΑΠΟΤΕΛΕΣΜΑ), item.ΠΑΡΑΤΗΡΗΣΕΙΣ])
+            if "C/M/Y" in item.ΠΕΡΙΓΡΑΦΗ:
+                self.qitem.setBackground(3, QtGui.QColor('green'))
+                self.qitem.setForeground(3, QtGui.QColor('white'))
+            elif "CYAN" in item.ΠΕΡΙΓΡΑΦΗ:
+                self.qitem.setBackground(3, QtGui.QColor('#0517D2'))
+                self.qitem.setForeground(3, QtGui.QColor('white'))
+            elif "MAGENTA" in item.ΠΕΡΙΓΡΑΦΗ:
+                self.qitem.setBackground(3, QtGui.QColor('#D205CF'))
+                self.qitem.setForeground(3, QtGui.QColor('white'))
+            elif "YELLOW" in item.ΠΕΡΙΓΡΑΦΗ:
+                self.qitem.setBackground(3, QtGui.QColor('yellow'))
+                self.qitem.setForeground(3, QtGui.QColor('black'))
+            elif "GRAY" in item.ΠΕΡΙΓΡΑΦΗ:
+                self.qitem.setBackground(3, QtGui.QColor("gray"))
+                self.qitem.setForeground(3, QtGui.QColor('white'))
+            elif "BLACK" in item.ΠΕΡΙΓΡΑΦΗ:
+                self.qitem.setBackground(3, QtGui.QColor("black"))
+                self.qitem.setForeground(3, QtGui.QColor('white'))
             self.qitem.setTextAlignment(4, QtCore.Qt.AlignCenter)
             self.treeWidget.setStyleSheet("QTreeView::item { padding: 10px }")
             self.treeWidget.addTopLevelItem(self.qitem)
@@ -807,17 +826,17 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
         self.edit_orders.selected_table = self.selected_table
         self.edit_orders.edit_order()  # Εμφάνηση δεδομένων απο την βάση δεδομένων
         self.edit_orders.show_file()  # Εμφάνηση Αρχείων
-        # self.edit_orders.window = self.edit_orders_window  # Αν θέλουμε να ανοιγουν πολλα παράθυρα
+        self.edit_orders.window = self.edit_orders_window  # Αν θέλουμε να ανοιγουν πολλα παράθυρα
         self.edit_orders_window.show()
         self.edit_orders.window_closed.connect(self.refresh_orders)
 
     def refresh_spare_parts(self):
         self.show_spare_parts(self.selected_table)
-        # self.edit_spare_part_window.close()
+        self.edit_spare_part_window.close()
 
     def refresh_orders(self):
         self.show_orders(self.selected_table)
-        self.edit_orders_window.close()
+        # self.edit_orders_window.close()
 
     def delete_orders(self):
         answer = QtWidgets.QMessageBox.warning(None, 'Προσοχή!', f"Σίγουρα θέλετε να διαγράψετε όλες τις παραγγελίες;",

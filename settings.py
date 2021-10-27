@@ -7,7 +7,7 @@ today_obj = datetime.today()
 today = datetime.today().strftime('%d/%m/%Y')
 now = datetime.now()
 now_str = now.strftime("%H-%M-%S")
-VERSION = "V 1.0.3"
+VERSION = "V 1.0.4"
 log_dir = "logs" + "/" + today.replace("/", "_") + "/"
 
 if not os.path.exists(log_dir):
