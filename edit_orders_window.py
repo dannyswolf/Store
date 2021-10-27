@@ -272,28 +272,34 @@ class Ui_edit_orders_window(QMainWindow):  # Πρέπει να κληρονομ�
         Εμφανίζει τα  δεδομένα που πέρνει απο την βάση δεδομέων στις σωστές θέσης για επεξεργασία
         :return: 0
         """
-
-        self.item = session.query(self.selected_table).get(self.selected_id)
-        # Show  data
-        self.lineEdit_code.setText(self.item.ΚΩΔΙΚΟΣ)
-        item_date = self.item.ΗΜΕΡΟΜΗΝΙΑ
-        date_obj = datetime.datetime.strptime(item_date, '%d/%m/%Y').date()
-        self.calendarWidget.setSelectedDate(QDate(date_obj))
-        self.status_lineEdit.setText(self.item.ΑΠΟΤΕΛΕΣΜΑ)
-        self.textEdit_description.setText(self.item.ΠΕΡΙΓΡΑΦΗ)
-        self.textEdit_comments.setText(self.item.ΠΑΡΑΤΗΡΗΣΕΙΣ)
-        # Show images
-        if self.item.images is not None:  # Οταν βάζουμε παραγγελία χειροκινιτα και οχι απο υπαρχον προιον
-                                     # το πεδίο images του item ειναι None στην Βάση δεδομένων ειναι Null
-            self.images_path = os.path.abspath(self.item.images)
-            # Μετατροπή των directories αναλογα με το λειτουργεικό συστημα
-            if sys.platform == "win32":
-                self.images_path = self.images_path.replace("/", "\\")
-            elif sys.platform == "linux":
-                self.images_path = self.images_path.replace("\\", "/")
-
-            if os.path.exists(self.images_path):
-                self.files = os.listdir(self.images_path)
+        try:
+            self.item = session.query(self.selected_table).get(self.selected_id)
+            # Show  data
+            self.lineEdit_code.setText(self.item.ΚΩΔΙΚΟΣ)
+            item_date = self.item.ΗΜΕΡΟΜΗΝΙΑ
+            date_obj = datetime.datetime.strptime(item_date, '%d/%m/%Y').date()
+            self.calendarWidget.setSelectedDate(QDate(date_obj))
+            if self.item.ΑΠΟΤΕΛΕΣΜΑ == "" or self.item.ΑΠΟΤΕΛΕΣΜΑ is None:
+                self.status_lineEdit.setText(" ")
+            else:
+                self.status_lineEdit.setText(self.item.ΑΠΟΤΕΛΕΣΜΑ)
+            self.textEdit_description.setText(self.item.ΠΕΡΙΓΡΑΦΗ)
+            self.textEdit_comments.setText(self.item.ΠΑΡΑΤΗΡΗΣΕΙΣ)
+            # Show images
+            if self.item.images is not None:  # Οταν βάζουμε παραγγελία χειροκινιτα και οχι απο υπαρχον προιον
+                                         # το πεδίο images του item ειναι None --> στην Βάση δεδομένων ειναι Null
+                self.images_path = os.path.abspath(self.item.images)
+                # Μετατροπή των directories αναλογα με το λειτουργεικό συστημα
+                if sys.platform == "win32":
+                    self.images_path = self.images_path.replace("/", "\\")
+                elif sys.platform == "linux":
+                    self.images_path = self.images_path.replace("\\", "/")
+                if os.path.exists(self.images_path):
+                    self.files = os.listdir(self.images_path)
+        except Exception:
+            traceback.print_exc()
+            QMessageBox.critical(None, "Σφάλμα", f"Κάτι δεν πήγε καλα!")
+            return
 
     def save_changes(self):
         try:

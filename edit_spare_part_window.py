@@ -290,6 +290,7 @@ class Ui_edit_spare_parts_window(QMainWindow):  # Πρέπει να κληρον
                                                  "background-color: rgb(0, 0, 0);")
         self.delete_spare_part_btn.setObjectName("delete_spare_part_btn")
         self.delete_spare_part_btn.clicked.connect(self.delete_spare_part)
+        self.delete_spare_part_btn.hide()
         self.gridLayout.addWidget(self.delete_spare_part_btn, 11, 0, 1, 1)
         # Esc
         self.shortcut_esc = QtWidgets.QShortcut(QtGui.QKeySequence('Escape'), edit_spare_parts_window)

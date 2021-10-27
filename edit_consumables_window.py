@@ -247,7 +247,8 @@ class Ui_edit_consumables_window(QtWidgets.QMainWindow):   # Πρέπει να �
         self.delete_spare_part_btn.setMinimumSize(QtCore.QSize(16777215, 30))
         self.delete_spare_part_btn.setObjectName("delete_spare_part_btn")
         self.delete_spare_part_btn.clicked.connect(lambda: self.delete_spare_part())
-        self.gridLayout.addWidget(self.delete_spare_part_btn, 20, 0, 1, 1)
+        self.delete_spare_part_btn.hide()
+        self.gridLayout.addWidget(self.delete_spare_part_btn, 20, 3, 1, 1)
 
         # Esc
         self.shortcut_esc = QtWidgets.QShortcut(QtGui.QKeySequence('Escape'), edit_consumables_window)
@@ -500,10 +501,10 @@ class Ui_edit_consumables_window(QtWidgets.QMainWindow):   # Πρέπει να �
             else:
                 pieces = self.pieces_lineEdit.text()
             price = self.price_lineEdit.text()
-            price = "{:.2f}".format(float(price.replace("€", ""))) + " €"
+            price = "{:.2f}".format(float(price.replace("€", "").replace(",", "."))) + " €"
 
             try:
-                total = int(pieces) * int(float(self.price_lineEdit.text().replace(" €", "").strip()))
+                total = int(pieces) * int(float(self.price_lineEdit.text().replace(" €", "").replace(",", ".").strip()))
                 total = f"{total:.2f} €"
             except ValueError:
                 total = "0.00 €"

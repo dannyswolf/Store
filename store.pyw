@@ -11,6 +11,7 @@
 ##############################################################################################
 
 # todo    ελεγχος αν υπάρχουν δυπλα part no και κωδικοί
+# Version = 1.0.3 Fix Prices with "," and multiple windows in consumables
 # Version = 1.0.2 Fix Prices and Readonly Total
 # Version = 1.0.1 Change Colors and fix Search
 # Version = 1.0.0 All ready
@@ -627,7 +628,7 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
         self.treeWidget.setHeaderLabels(["ID", "Κωδικός", "Ημερομηνία", "Περιγραφή", "Αποτέλεσμα", "Παρατηρήσεις"])
         self.treeWidget.header().setStyleSheet(u"background-color: gray;" "color: white;"
                                                "font-style: normal;font-size: 14pt;font-weight: bold;")
-        self.treeWidget.setSelectionMode(QtWidgets.QAbstractItemView.MultiSelection)
+        self.treeWidget.setSelectionMode(QtWidgets.QAbstractItemView.ExtendedSelection)
 
         for index, item in enumerate(self.data_to_show):
             self.qitem = TreeWidgetItem(self.treeWidget,
@@ -754,7 +755,7 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
         self.edit_spare_part.selected_table = self.selected_table
         self.edit_spare_part.edit_spare_part()  # Εμφάνηση δεδομένων απο την βάση δεδομένων
         self.edit_spare_part.show_file()  # Εμφάνηση Αρχείων
-        # self.edit_spare_part.window = self.edit_spare_part_window  # Αν θέλουμε να ανοιγουν πολλα παράθυρα
+        self.edit_spare_part.window = self.edit_spare_part_window  # Αν θέλουμε να ανοιγουν πολλα παράθυρα
         self.edit_spare_part_window.show()
         self.edit_spare_part.window_closed.connect(self.refresh_spare_parts)
 
@@ -769,13 +770,14 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
         self.edit_consumable.selected_table = self.selected_table
         self.edit_consumable.edit_consumable()  # Εμφάνηση δεδομένων απο την βάση δεδομένων
         self.edit_consumable.show_file()  # Εμφάνηση Αρχείων
-        # self.edit_consumable.window = self.edit_consumables_window  # Αν θέλουμε να ανοιγουν πολλα παράθυρα
+        self.edit_consumable.window = self.edit_consumables_window  # Αν θέλουμε να ανοιγουν πολλα παράθυρα
         self.edit_consumables_window.show()
         self.edit_consumable.window_closed.connect(self.refresh_consumables)
 
     def refresh_consumables(self):
         self.show_consumables(self.selected_table)
-        self.edit_consumables_window.close()
+        # self.edit_consumables_window.close()  # Να μήν κλεινει το παράθυρο αν θέλουμε να ανοιγουν πολλα παράθυρα
+                                                # γιατί κλεινει και το προηγούμενο παράθυρο
 
     def show_edit_melanotainies_window(self, item, column):  # column ειναι η στήλη που πατησε κλικ
         item_id = item.text(0)  # item.text(0)  == ID
@@ -788,20 +790,19 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
         self.edit_melanotainia.selected_table = self.selected_table
         self.edit_melanotainia.edit_melanotainia()  # Εμφάνηση δεδομένων απο την βάση δεδομένων
         self.edit_melanotainia.show_file()  # Εμφάνηση Αρχείων
-        # self.edit_melanotainia.window = self.edit_melanotainies_window  # Αν θέλουμε να ανοιγουν πολλα παράθυρα
+        self.edit_melanotainia.window = self.edit_melanotainies_window  # Αν θέλουμε να ανοιγουν πολλα παράθυρα
         self.edit_melanotainies_window.show()
         self.edit_melanotainia.window_closed.connect(self.refresh_melanotainies)
 
     def refresh_melanotainies(self):
         self.show_melanotainies(self.selected_table)
-        self.edit_melanotainies_window.close()
+        # self.edit_melanotainies_window.close()
 
     def show_edit_orders_window(self, item, column):  # column ειναι η στήλη που πατησε κλικ
         item_id = item.text(0)
         self.edit_orders_window = QWidget()
         self.edit_orders = Ui_edit_orders_window()
         self.edit_orders.setupUi(self.edit_orders_window)  # Αρχικοποιηση των κουμπιων, γραμμων επεξεργασίας κτλπ
-
         self.edit_orders.selected_id = item_id
         self.edit_orders.selected_table = self.selected_table
         self.edit_orders.edit_order()  # Εμφάνηση δεδομένων απο την βάση δεδομένων
@@ -812,7 +813,7 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
 
     def refresh_spare_parts(self):
         self.show_spare_parts(self.selected_table)
-        self.edit_spare_part_window.close()
+        # self.edit_spare_part_window.close()
 
     def refresh_orders(self):
         self.show_orders(self.selected_table)
