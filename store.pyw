@@ -4,13 +4,16 @@
 #
 # Created by: PyQt5 UI code generator 5.15.4
 # ###############################------------------NOTES--------------------###################
-# στα Μελανακια - Toner - Φωτοτυπικα μπορουμε να ανοιξουμε μόνο ενα παράθυρο ταυτόχρονα
+# todo                  Προβλημα με πολλαπλα παράθυρα είναι οτι όταν πατάς αποθύκευση στο πρώτο παράθυρο που ανοιξες
+#                                       κλεινει το δευτερο παράθυρο
+# στα ανταλλακτικα (spare_parts) μπορουμε να ανοιξουμε μόνο ενα παράθυρο ταυτόχρονα
 # για να μήν μπερδευόμαστε
 # για να ανοιξουμε πολλά παράθυρα βαζουμε  # self.edit_spare_part.window = self.edit_spare_part_window
 # ετσι  δημουργούμε κάθε φορά νεο παράθυρο
 ##############################################################################################
 
 # todo    ελεγχος αν υπάρχουν δυπλα part no και κωδικοί
+# Version = 1.0.5 Close window after save
 # Version = 1.0.4 Χρώματα στις παραγγελίες και πολλαπλά παράθυρα
 # Version = 1.0.3 Fix Prices with "," and multiple windows in consumables
 # Version = 1.0.2 Fix Prices and Readonly Total
@@ -795,7 +798,7 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
 
     def refresh_consumables(self):
         self.show_consumables(self.selected_table)
-        # self.edit_consumables_window.close()  # Να μήν κλεινει το παράθυρο αν θέλουμε να ανοιγουν πολλα παράθυρα
+        self.edit_consumables_window.close()  # Να μήν κλεινει το παράθυρο αν θέλουμε να ανοιγουν πολλα παράθυρα
                                                 # γιατί κλεινει και το προηγούμενο παράθυρο
 
     def show_edit_melanotainies_window(self, item, column):  # column ειναι η στήλη που πατησε κλικ
@@ -815,7 +818,7 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
 
     def refresh_melanotainies(self):
         self.show_melanotainies(self.selected_table)
-        # self.edit_melanotainies_window.close()
+        self.edit_melanotainies_window.close()
 
     def show_edit_orders_window(self, item, column):  # column ειναι η στήλη που πατησε κλικ
         item_id = item.text(0)
@@ -836,7 +839,8 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
 
     def refresh_orders(self):
         self.show_orders(self.selected_table)
-        # self.edit_orders_window.close()
+        self.edit_orders_window.close()  # Να μήν κλείνει το παράθυρο γιατι κλεινει λαθος παράθυρο καμια φορά
+
 
     def delete_orders(self):
         answer = QtWidgets.QMessageBox.warning(None, 'Προσοχή!', f"Σίγουρα θέλετε να διαγράψετε όλες τις παραγγελίες;",

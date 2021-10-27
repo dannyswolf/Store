@@ -341,7 +341,7 @@ class Ui_edit_orders_window(QMainWindow):  # Πρέπει να κληρονομ�
     def closeEvent(self, event):
         self.window_closed.emit()
         event.accept()
-        # event.ignore() # if you want the window to never be closed
+        # event.ignore()  # if you want the window to never be closed
 
     def add_file(self):
         options = QFileDialog.Options()

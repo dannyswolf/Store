@@ -24,6 +24,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 sys.stderr.write = root_logger.error
 sys.stdout.write = root_logger.info
 
+
 class Ui_edit_consumables_window(QtWidgets.QMainWindow):   # Πρέπει να κληρονομήσει απο QMainWindow for pyqtSignal to work
     window_closed = QtCore.pyqtSignal()  # Το Signal πρεπει να είναι εκτός __init__ δεν δουλευει αλλιως
 
@@ -389,7 +390,7 @@ class Ui_edit_consumables_window(QtWidgets.QMainWindow):   # Πρέπει να �
     def closeEvent(self, event):
         self.window_closed.emit()
         event.accept()
-        # event.ignore() # if you want the window to never be closed
+        # event.ignore()  # if you want the window to never be closed
 
     def next_file(self):
         try:
