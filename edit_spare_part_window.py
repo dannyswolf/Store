@@ -4,6 +4,7 @@
 #
 # Created by: PyQt5 UI code generator 5.15.4
 #
+import re
 import sys
 import subprocess
 import os
@@ -296,7 +297,7 @@ class Ui_edit_spare_parts_window(QMainWindow):  # Πρέπει να κληρον
         self.gridLayout.addWidget(self.delete_spare_part_btn, 11, 0, 1, 1)
         # Esc
         self.shortcut_esc = QtWidgets.QShortcut(QtGui.QKeySequence('Escape'), edit_spare_parts_window)
-        self.shortcut_esc.activated.connect(self.close)
+        self.shortcut_esc.activated.connect(lambda: self.close())
 
         self.retranslateUi(edit_spare_parts_window)
         QtCore.QMetaObject.connectSlotsByName(edit_spare_parts_window)
@@ -360,6 +361,17 @@ class Ui_edit_spare_parts_window(QMainWindow):  # Πρέπει να κληρον
             # set data to object
             # ελεγχος αν είναι να προσθέσουμε καινούριο προιόν
             if self.item is None:
+                # Ελεγχος αν υπάρχει ο κωδικός
+                if session.query(exists().where(self.selected_table.ΚΩΔΙΚΟΣ == self.code)).scalar():
+                    QtWidgets.QMessageBox.critical(None, "Σφάλμα", f"O κωδικός {self.code} υπάρχει")
+                    return
+                # Ελεγχος αν υπάρχει το part no
+                all_parts = session.query(self.selected_table.PARTS_NR).all()  # [('14501',), ('LU7179001',)]
+                for part in all_parts:
+
+                    if re.sub('[^A-Za-z0-9]+', '', part[0].lower()) == re.sub('[^A-Za-z0-9]+', '', self.part_no.lower()):
+                        QtWidgets.QMessageBox.critical(None, "Σφάλμα", f"Το Part Nr {re.sub('[^A-Za-z0-9]+', '', self.part_no.lower())} υπάρχει")
+                        return
                 self.item = self.selected_table(PARTS_NR=self.part_no.replace(" ", ""), ΠΕΡΙΓΡΑΦΗ=self.description,
                                                 ΚΩΔΙΚΟΣ=self.code, ΤΕΜΑΧΙΑ=self.pieces, ΠΑΡΑΤΗΡΗΣΗΣ=self.comments)
                 session.add(self.item)

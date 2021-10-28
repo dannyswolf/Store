@@ -4,15 +4,17 @@
 #
 # Created by: PyQt5 UI code generator 5.15.4
 # ###############################------------------NOTES--------------------###################
-# todo                  Προβλημα με πολλαπλα παράθυρα είναι οτι όταν πατάς αποθύκευση στο πρώτο παράθυρο που ανοιξες
-#                                       κλεινει το δευτερο παράθυρο
-# στα ανταλλακτικα (spare_parts) μπορουμε να ανοιξουμε μόνο ενα παράθυρο ταυτόχρονα
+#
+# στα ανταλλακτικα (spare_parts) μπορουμε να ανοιξουμε μόνο δυο παράθυρα ταυτόχρονα + 1 για εισαγώγή νέου
+# στα αναλώσιμα (consumables) μπορουμε να ανοιξουμε μόνο τρια παράθυρα ταυτόχρονα + 1 για εισαγώγή νέου
+# στις παραγγελίες (orders) μπορουμε να ανοιξουμε μόνο δυο παράθυρα ταυτόχρονα + 1 για εισαγώγή νέου
+# στις μελανοταινίες (melanotainies) μπορουμε να ανοιξουμε μόνο δυο παράθυρα ταυτόχρονα + 1 για εισαγώγή νέου
 # για να μήν μπερδευόμαστε
 # για να ανοιξουμε πολλά παράθυρα βαζουμε  # self.edit_spare_part.window = self.edit_spare_part_window
 # ετσι  δημουργούμε κάθε φορά νεο παράθυρο
 ##############################################################################################
 
-# todo    ελεγχος αν υπάρχουν δυπλα part no και κωδικοί
+# Version = 1.0.7 Check for double part no + κωδικούς and search with re.sub()
 # Version = 1.0.6 Διαχείριση πολλαπλών παραθύρων
 # Version = 1.0.5 Close window after save
 # Version = 1.0.4 Χρώματα στις παραγγελίες και πολλαπλά παράθυρα
@@ -713,7 +715,8 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
         self.treeWidget.clear()
         for index, item in enumerate(self.data_to_show):
             list_of_item = str(item).replace(" ", "")
-            if text_to_search.lower().replace(" ", "") in list_of_item.lower():
+
+            if re.sub('[^A-Za-z0-9]+', '', text_to_search.lower()) in re.sub('[^A-Za-z0-9]+', '', str(item).lower()):
                 # ΠΑΡΑΓΓΕΛΙΕΣ
                 if self.selected_table_label.text() == "ΠΑΡΑΓΓΕΛΙΕΣ":
                     self.qitem = QTreeWidgetItem(self.treeWidget,
@@ -1115,9 +1118,9 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
         elif self.selected_table_label.text() == "ΜΕΛΑΝΟΤΑΙΝΙΕΣ":
             if self.new_melanotainies_window is not None:
                 QtWidgets.QMessageBox.warning(None, 'Προσοχή!', f"Έχετε ήδη ανοιχτό παράθυρο προσθήκης "
-                                                                f"{self.selected_table_label.text()}\n"
+                                                                f"μελανοταινίας\n"
                                                                 f"Παρακαλώ κλείστε πρώτα το παράθυρο προσθήκης "
-                                                                f"{self.selected_table_label.text()}")
+                                                                f"μελανοταινίας")
                 return
             else:
                 self.new_melanotainies_window = QWidget()

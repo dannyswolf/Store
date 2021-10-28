@@ -253,7 +253,7 @@ class Ui_edit_consumables_window(QtWidgets.QMainWindow):   # Πρέπει να �
 
         # Esc
         self.shortcut_esc = QtWidgets.QShortcut(QtGui.QKeySequence('Escape'), edit_consumables_window)
-        self.shortcut_esc.activated.connect(self.close)
+        self.shortcut_esc.activated.connect(lambda: self.close())
 
         self.retranslateUi(edit_consumables_window)
         QtCore.QMetaObject.connectSlotsByName(edit_consumables_window)
@@ -521,6 +521,10 @@ class Ui_edit_consumables_window(QtWidgets.QMainWindow):   # Πρέπει να �
 
             # ελεγχος αν είναι να προσθέσουμε καινούριο προιόν
             if self.item is None:
+                # Ελεγχος αν υπάρχει ο κωδικός
+                if session.query(exists().where(self.selected_table.ΚΩΔΙΚΟΣ == self.code_lineEdit.text())).scalar():
+                    QtWidgets.QMessageBox.critical(None, "Σφάλμα", f"O κωδικός {self.code_lineEdit.text()} υπάρχει")
+                    return
                 # Φτιάχνουμε νέο object
                 self.item = self.selected_table(ΕΤΑΙΡΕΙΑ=self.company_lineEdit.text(), ΠΟΙΟΤΗΤΑ=self.quality_lineEdit.text(),
                                                 ΑΝΑΛΩΣΙΜΟ=self.consumable_lineEdit.text(),

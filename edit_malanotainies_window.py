@@ -24,6 +24,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 sys.stderr.write = root_logger.error
 sys.stdout.write = root_logger.info
 
+
 class Ui_edit_melanotainies_window(QtWidgets.QMainWindow):  # Πρέπει να κληρονομήσει απο QMainWindow for pyqtSignal to work
     window_closed = QtCore.pyqtSignal()  # Το Signal πρεπει να είναι εκτός __init__ δεν δουλευει αλλιως
 
@@ -252,7 +253,7 @@ class Ui_edit_melanotainies_window(QtWidgets.QMainWindow):  # Πρέπει να 
 
         # Esc
         self.shortcut_esc = QtWidgets.QShortcut(QtGui.QKeySequence('Escape'), edit_melanotainies_window)
-        self.shortcut_esc.activated.connect(self.close)
+        self.shortcut_esc.activated.connect(lambda: self.close())
 
         self.retranslateUi(edit_melanotainies_window)
         QtCore.QMetaObject.connectSlotsByName(edit_melanotainies_window)
@@ -506,7 +507,11 @@ class Ui_edit_melanotainies_window(QtWidgets.QMainWindow):  # Πρέπει να 
                 pieces = "0"
             else:
                 pieces = self.pieces_lineEdit.text()
-            price = self.price_lineEdit.text()
+            # Ελεγχος τιμής
+            if self.price_lineEdit.text() == "" or self.price_lineEdit.text() is None:
+                price = "0"
+            else:
+                price = self.price_lineEdit.text()
             price = "{:.2f}".format(float(price.replace("€", "").replace(",", "."))) + " €"
             try:
                 total = int(pieces) * int(
@@ -516,6 +521,10 @@ class Ui_edit_melanotainies_window(QtWidgets.QMainWindow):  # Πρέπει να 
                 total = "0.00 €"
 
             if self.item is None:
+                # Ελεγχος αν υπάρχει ο κωδικός
+                if session.query(exists().where(self.selected_table.ΚΩΔΙΚΟΣ == self.code_lineEdit.text())).scalar():
+                    QtWidgets.QMessageBox.critical(None, "Σφάλμα", f"O κωδικός {self.code_lineEdit.text()} υπάρχει")
+                    return
                 # Φτιάχνουμε νέο object
                 self.item = self.selected_table(ΕΤΑΙΡΕΙΑ=self.company_lineEdit.text(),
                                                 ΠΟΙΟΤΗΤΑ=self.quality_lineEdit.text(),

@@ -11,6 +11,7 @@ import os
 import shutil
 import pathlib  # Για αποθήκευση αρχείου να πάρουμε μόνο την κατάληξει .svg.png
 import sqlalchemy
+from sqlalchemy.sql import exists
 import traceback
 from PyQt5 import QtCore, QtWidgets, QtGui
 from PyQt5.QtCore import pyqtSignal, QDate
@@ -245,7 +246,7 @@ class Ui_edit_orders_window(QMainWindow):  # Πρέπει να κληρονομ�
 
         # Esc
         self.shortcut_esc = QtWidgets.QShortcut(QtGui.QKeySequence('Escape'), edit_orders_window)
-        self.shortcut_esc.activated.connect(self.close)
+        self.shortcut_esc.activated.connect(lambda: self.close())
 
         self.retranslateUi(edit_orders_window)
         QtCore.QMetaObject.connectSlotsByName(edit_orders_window)
@@ -315,6 +316,10 @@ class Ui_edit_orders_window(QMainWindow):  # Πρέπει να κληρονομ�
             # set data to object
             # ελεγχος αν είναι να προσθέσουμε καινούριο προιόν
             if self.item is None:
+                # Ελεγχος αν υπάρχει ο κωδικός
+                if session.query(exists().where(self.selected_table.ΚΩΔΙΚΟΣ == self.code)).scalar():
+                    QtWidgets.QMessageBox.critical(None, "Σφάλμα", f"O κωδικός {self.code} υπάρχει")
+                    return
                 # Φτιάχνουμε νέο object
                 self.item = self.selected_table(ΗΜΕΡΟΜΗΝΙΑ=self.date, ΠΕΡΙΓΡΑΦΗ=self.description,
                                                 ΚΩΔΙΚΟΣ=self.code, ΑΠΟΤΕΛΕΣΜΑ=self.status, ΠΑΡΑΤΗΡΗΣΕΙΣ=self.comments)
