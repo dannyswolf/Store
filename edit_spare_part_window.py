@@ -400,6 +400,8 @@ class Ui_edit_spare_parts_window(QMainWindow):  # Πρέπει να κληρον
     def closeEvent(self, event):
         self.window_closed.emit()
         event.accept()
+
+
         # event.ignore() # if you want the window to never be closed
 
     def send_to_orders(self):

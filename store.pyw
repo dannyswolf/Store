@@ -4,7 +4,8 @@
 #
 # Created by: PyQt5 UI code generator 5.15.4
 # ###############################------------------NOTES--------------------###################
-#
+# Αν ο χρήστης κλεισει τα παράθυρα απο το Χ πανω δεξια το self.edit_spare_parts_windows δεν γινεται None
+# για αυτο βάζουμε αν είναι ορατο -->  self.edit_spare_part_window.isVisible()
 # στα ανταλλακτικα (spare_parts) μπορουμε να ανοιξουμε μόνο δυο παράθυρα ταυτόχρονα + 1 για εισαγώγή νέου
 # στα αναλώσιμα (consumables) μπορουμε να ανοιξουμε μόνο τρια παράθυρα ταυτόχρονα + 1 για εισαγώγή νέου
 # στις παραγγελίες (orders) μπορουμε να ανοιξουμε μόνο δυο παράθυρα ταυτόχρονα + 1 για εισαγώγή νέου
@@ -13,7 +14,7 @@
 # για να ανοιξουμε πολλά παράθυρα βαζουμε  # self.edit_spare_part.window = self.edit_spare_part_window
 # ετσι  δημουργούμε κάθε φορά νεο παράθυρο
 ##############################################################################################
-
+# Version = 1.0.8 Fix closed windows with X
 # Version = 1.0.7 Check for double part no + κωδικούς and search with re.sub()
 # Version = 1.0.6 Διαχείριση πολλαπλών παραθύρων
 # Version = 1.0.5 Close window after save
@@ -798,7 +799,9 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
 
     def show_edit_spare_part_window(self, item, column):  # column ειναι η στήλη που πατησε κλικ
         item_id = item.text(0)  # item.text(0)  == ID
-        if self.edit_spare_part_window is None:
+        # Αν δεν υπάρχει edit_spare_part_window ή αν ο χρήστης εχει κλεισει το παράθυρο απο το Χ πανω δεξια
+        # ελεγχουμε αν ειναι ορατο
+        if self.edit_spare_part_window is None or not self.edit_spare_part_window.isVisible():
             self.edit_spare_part_window = QWidget()
             self.edit_spare_part_window.setWindowTitle("Επεξεργασία πρώτου ανταλλακτικού")
             self.edit_spare_part = Ui_edit_spare_parts_window()
@@ -810,7 +813,7 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
             self.edit_spare_part.window = self.edit_spare_part_window  # Αν θέλουμε να ανοιγουν πολλα παράθυρα
             self.edit_spare_part_window.show()
             self.edit_spare_part.window_closed.connect(self.refresh_spare_parts)
-        elif self.second_edit_spare_part_window is None:
+        elif self.second_edit_spare_part_window is None or not self.second_edit_spare_part_window.isVisible():
             self.second_edit_spare_part_window = QWidget()
             self.second_edit_spare_part_window.setWindowTitle(f"Επεξεργασία δεύτερου ανταλλακτικού")
             self.second_edit_spare_part = Ui_edit_spare_parts_window()
@@ -844,7 +847,7 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
 
     def show_edit_consumables_window(self, item, column):
         item_id = item.text(0)  # item.text(0)  == ID# column ειναι η στήλη που πατησε κλικ
-        if self.edit_consumables_window is None:
+        if self.edit_consumables_window is None or not self.edit_consumables_window.isVisible():
             self.edit_consumables_window = QWidget()
             self.edit_consumables_window.setWindowTitle(f"Επεξεργασία πρώτου αναλώσιμου")
             self.edit_consumables_window.setStyleSheet(u"font: 75 13pt \"Calibri\";")
@@ -858,7 +861,7 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
             self.edit_consumable.window = self.edit_consumables_window  # Αν θέλουμε να ανοιγουν πολλα παράθυρα
             self.edit_consumables_window.show()
             self.edit_consumable.window_closed.connect(self.refresh_consumables)
-        elif self.second_edit_consumables_window is None:
+        elif self.second_edit_consumables_window is None or not self.second_edit_consumables_window.isVisible():
             self.second_edit_consumables_window = QWidget()
             self.second_edit_consumables_window.setWindowTitle(f"Επεξεργασία δεύτερου αναλώσιμου")
             self.second_edit_consumables_window.setStyleSheet(u"font: 75 13pt \"Calibri\";")
@@ -872,7 +875,7 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
             self.second_edit_consumable.window = self.second_edit_consumables_window  # Αν θέλουμε να ανοιγουν πολλα παράθυρα
             self.second_edit_consumables_window.show()
             self.second_edit_consumable.window_closed.connect(self.second_refresh_consumables)
-        elif self.third_edit_consumables_window is None:
+        elif self.third_edit_consumables_window is None or not self.third_edit_consumables_window.isVisible():
             self.third_edit_consumables_window = QWidget()
             self.third_edit_consumables_window.setWindowTitle(f"Επεξεργασία τρίτου αναλώσιμου")
             self.third_edit_consumables_window.setStyleSheet(u"font: 75 13pt \"Calibri\";")
@@ -913,7 +916,7 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
 
     def show_edit_melanotainies_window(self, item, column):  # column ειναι η στήλη που πατησε κλικ
         item_id = item.text(0)  # item.text(0)  == ID
-        if self.edit_melanotainies_window is None:
+        if self.edit_melanotainies_window is None or not self.edit_melanotainies_window.isVisible():
             self.edit_melanotainies_window = QWidget()
             self.edit_melanotainies_window.setWindowTitle("Επεξεργασία πρώτης μελανοταινίας")
             self.edit_melanotainies_window.setStyleSheet(u"font: 75 13pt \"Calibri\";")
@@ -927,7 +930,7 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
             self.edit_melanotainia.window = self.edit_melanotainies_window  # Αν θέλουμε να ανοιγουν πολλα παράθυρα
             self.edit_melanotainies_window.show()
             self.edit_melanotainia.window_closed.connect(self.refresh_melanotainies)
-        elif self.second_edit_melanotainies_window is None:
+        elif self.second_edit_melanotainies_window is None or not self.second_edit_melanotainies_window.isVisible():
             self.second_edit_melanotainies_window = QWidget()
             self.second_edit_melanotainies_window.setWindowTitle("Επεξεργασία δεύτερης μελανοταινίας")
             self.second_edit_melanotainies_window.setStyleSheet(u"font: 75 13pt \"Calibri\";")
@@ -963,7 +966,7 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
 
     def show_edit_orders_window(self, item, column):  # column ειναι η στήλη που πατησε κλικ
         item_id = item.text(0)
-        if self.edit_orders_window is None:
+        if self.edit_orders_window is None or not self.edit_orders_window.isVisible():
             self.edit_orders_window = QWidget()
             self.edit_orders_window.setWindowTitle("Επεξεργασία πρώτης παραγγελίας")
             self.edit_orders = Ui_edit_orders_window()
@@ -975,7 +978,7 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
             self.edit_orders.window = self.edit_orders_window  # Αν θέλουμε να ανοιγουν πολλα παράθυρα
             self.edit_orders_window.show()
             self.edit_orders.window_closed.connect(self.refresh_orders)
-        elif self.second_edit_orders_window is None:
+        elif self.second_edit_orders_window is None or not self.second_edit_orders_window.isVisible():
             self.second_edit_orders_window = QWidget()
             self.second_edit_orders_window.setWindowTitle("Επεξεργασία δεύτερης παραγγελίας")
             self.second_edit_orders = Ui_edit_orders_window()
@@ -1050,7 +1053,6 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
             self.btn_grp.addButton(btn)
 
     def change_colors_of_pressed_btn(self, pressed_btn):
-
         up_btn = [self.brother_btn, self.canon_btn, self.epson_btn, self.konica_btn, self.kyocera_btn, self.lexmark_btn,
                   self.oki_btn, self.ricoh_btn, self.samsung_btn, self.sharp_btn]
         down_btn = [self.melanakia_btn, self.melanotainies_btn, self.toner_btn, self.copiers_btn, self.orders_btn]
@@ -1079,7 +1081,7 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
             QtWidgets.QMessageBox.warning(None, 'Προσοχή!', f"Πρέπει πρώτα να επιλέξετε πίνακα!")
             return
         if self.selected_table_label.text() == "ΠΑΡΑΓΓΕΛΙΕΣ":
-            if self.new_orders_window is not None:
+            if self.new_orders_window is not None and self.new_orders_window.isVisible():
                 QtWidgets.QMessageBox.warning(None, 'Προσοχή!', f"Έχετε ήδη ανοιχτό παράθυρο προσθήκης παραγγελίας\n"
                                                                 f"Παρακαλώ κλείστε πρώτα το παράθυρο προσθήκης "
                                                                 f"παραγγελίας")
@@ -1098,7 +1100,7 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
 
         elif self.selected_table_label.text() == "ΜΕΛΑΝΑΚΙΑ" or self.selected_table_label.text() == "ΤΟΝΕΡ" \
                 or self.selected_table_label.text() == "ΦΩΤΟΤΥΠΙΚΑ":
-            if self.new_consumables_window is not None:
+            if self.new_consumables_window is not None and self.new_consumables_window.isVisible():
                 QtWidgets.QMessageBox.warning(None, 'Προσοχή!', f"Έχετε ήδη ανοιχτό παράθυρο προσθήκης αναλώσιμου\n"
                                                                 f"Παρακαλώ κλείστε πρώτα το παράθυρο προσθήκης "
                                                                 f"αναλώσιμου")
@@ -1116,7 +1118,7 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
                 self.new_consumable.window_closed.connect(self.new_refresh_consumables)
 
         elif self.selected_table_label.text() == "ΜΕΛΑΝΟΤΑΙΝΙΕΣ":
-            if self.new_melanotainies_window is not None:
+            if self.new_melanotainies_window is not None and self.new_melanotainies_window.isVisible():
                 QtWidgets.QMessageBox.warning(None, 'Προσοχή!', f"Έχετε ήδη ανοιχτό παράθυρο προσθήκης "
                                                                 f"μελανοταινίας\n"
                                                                 f"Παρακαλώ κλείστε πρώτα το παράθυρο προσθήκης "
@@ -1135,7 +1137,9 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
                 self.new_melanotainies_window.show()
                 self.new_melanotainia.window_closed.connect(self.new_refresh_melanotainies)
         else:
-            if self.new_spare_part_window is not None:
+            # Αν δεν είναι None και είναι ορατό τοτε ο χρήστης πρεπει να κλεισει το παράθυρο πριν ανοιξει αλλο
+            if self.new_spare_part_window is not None and self.new_spare_part_window.isVisible():
+                # Ελεγχος αν υπαρχει και δεν ειναι ορατό --> οταν ο χρήστης παταει Χ πανω δεξια
                 QtWidgets.QMessageBox.warning(None, 'Προσοχή!', f"Έχετε ήδη ανοιχτό παράθυρο προσθήκης ανταλλακτικού\n"
                                                                 f"Παρακαλώ κλείστε πρώτα το παράθυρο προσθήκης "
                                                                 f"ανταλλακτικού")
