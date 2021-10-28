@@ -259,7 +259,7 @@ class Ui_edit_melanotainies_window(QtWidgets.QMainWindow):  # Πρέπει να 
 
     def retranslateUi(self, edit_melanotainies_window):
         _translate = QtCore.QCoreApplication.translate
-        edit_melanotainies_window.setWindowTitle(_translate("edit_melanotainies_window", "Επεξεργασία αναλώσιμου"))
+        # edit_melanotainies_window.setWindowTitle(_translate("edit_melanotainies_window", "Επεξεργασία αναλώσιμου"))
         self.customers_label.setText(_translate("edit_melanotainies_window", "Πελάτες"))
         self.quality_label.setText(_translate("edit_melanotainies_window", "Ποιότητα"))
         self.code_label.setText(_translate("edit_melanotainies_window", "Κωδικός"))
@@ -497,6 +497,9 @@ class Ui_edit_melanotainies_window(QtWidgets.QMainWindow):  # Πρέπει να 
             self.show_file()
 
     def save_changes(self):
+        if self.code_lineEdit.text() is None or self.code_lineEdit.text() == "":
+            QtWidgets.QMessageBox.warning(None, "Προσοχή!", "Ο κωδικός δεν μπορεί να είναι κενός!")
+            return
         try:
             # ελεγχος αν είναι να προσθέσουμε καινούριο προιόν
             if self.pieces_lineEdit.text() == "" or self.pieces_lineEdit.text() is None:

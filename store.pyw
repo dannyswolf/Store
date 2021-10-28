@@ -13,6 +13,7 @@
 ##############################################################################################
 
 # todo    ελεγχος αν υπάρχουν δυπλα part no και κωδικοί
+# Version = 1.0.6 Διαχείριση πολλαπλών παραθύρων
 # Version = 1.0.5 Close window after save
 # Version = 1.0.4 Χρώματα στις παραγγελίες και πολλαπλά παράθυρα
 # Version = 1.0.3 Fix Prices with "," and multiple windows in consumables
@@ -82,14 +83,40 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
         super(Ui_MainWindow, self).__init__(*args, **kwargs)
         self.selected_table = None
         self.data_to_show = None
+
+        self.new_spare_part_window = None
         self.edit_spare_part_window = None
+        self.second_edit_spare_part_window = None
+
+        self.new_consumables_window = None
         self.edit_consumables_window = None
+        self.second_edit_consumables_window = None
+        self.third_edit_consumables_window = None
+
+        self.new_melanotainies_window = None
         self.edit_melanotainies_window = None
+        self.second_edit_melanotainies_window = None
+
+        self.new_orders_window = None
         self.edit_orders_window = None
+        self.second_edit_orders_window = None
+
+        self.new_spare_part = None
         self.edit_spare_part = None
+        self.second_edit_spare_part = None
+
+        self.new_order = None
         self.edit_orders = None
+        self.second_edit_orders = None
+
+        self.new_consumable = None
         self.edit_consumable = None
+        self.second_edit_consumable = None
+        self.third_edit_consumable = None
+
+        self.new_melanotainia = None
         self.edit_melanotainia = None
+        self.second_edit_melanotainia = None
 
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
@@ -457,7 +484,6 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
         self.progressBar.hide()
         self.statusBar.addPermanentWidget(self.progressBar)
 
-
         self.grouping_btn()
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
@@ -769,78 +795,215 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
 
     def show_edit_spare_part_window(self, item, column):  # column ειναι η στήλη που πατησε κλικ
         item_id = item.text(0)  # item.text(0)  == ID
-        self.edit_spare_part_window = QWidget()
-        self.edit_spare_part = Ui_edit_spare_parts_window()
-        self.edit_spare_part.setupUi(
-            self.edit_spare_part_window)  # Αρχικοποιηση των κουμπιων, γραμμων επεξεργασίας κτλπ
-        self.edit_spare_part.selected_id = item_id
-        self.edit_spare_part.selected_table = self.selected_table
-        self.edit_spare_part.edit_spare_part()  # Εμφάνηση δεδομένων απο την βάση δεδομένων
-        self.edit_spare_part.show_file()  # Εμφάνηση Αρχείων
-        self.edit_spare_part.window = self.edit_spare_part_window  # Αν θέλουμε να ανοιγουν πολλα παράθυρα
-        self.edit_spare_part_window.show()
-        self.edit_spare_part.window_closed.connect(self.refresh_spare_parts)
-
-    def show_edit_consumables_window(self, item, column):  # column ειναι η στήλη που πατησε κλικ
-        item_id = item.text(0)  # item.text(0)  == ID
-        self.edit_consumables_window = QWidget()
-        self.edit_consumables_window.setStyleSheet(u"font: 75 13pt \"Calibri\";")
-        self.edit_consumable = Ui_edit_consumables_window()
-        self.edit_consumable.setupUi(
-            self.edit_consumables_window)  # Αρχικοποιηση των κουμπιων, γραμμων επεξεργασίας κτλπ
-        self.edit_consumable.selected_id = item_id
-        self.edit_consumable.selected_table = self.selected_table
-        self.edit_consumable.edit_consumable()  # Εμφάνηση δεδομένων απο την βάση δεδομένων
-        self.edit_consumable.show_file()  # Εμφάνηση Αρχείων
-        self.edit_consumable.window = self.edit_consumables_window  # Αν θέλουμε να ανοιγουν πολλα παράθυρα
-        self.edit_consumables_window.show()
-        self.edit_consumable.window_closed.connect(self.refresh_consumables)
-
-    def refresh_consumables(self):
-        self.show_consumables(self.selected_table)
-        self.edit_consumables_window.close()  # Να μήν κλεινει το παράθυρο αν θέλουμε να ανοιγουν πολλα παράθυρα
-                                                # γιατί κλεινει και το προηγούμενο παράθυρο
-
-    def show_edit_melanotainies_window(self, item, column):  # column ειναι η στήλη που πατησε κλικ
-        item_id = item.text(0)  # item.text(0)  == ID
-        self.edit_melanotainies_window = QWidget()
-        self.edit_melanotainies_window.setStyleSheet(u"font: 75 13pt \"Calibri\";")
-        self.edit_melanotainia = Ui_edit_melanotainies_window()
-        self.edit_melanotainia.setupUi(
-            self.edit_melanotainies_window)  # Αρχικοποιηση των κουμπιων, γραμμων επεξεργασίας κτλπ
-        self.edit_melanotainia.selected_id = item_id
-        self.edit_melanotainia.selected_table = self.selected_table
-        self.edit_melanotainia.edit_melanotainia()  # Εμφάνηση δεδομένων απο την βάση δεδομένων
-        self.edit_melanotainia.show_file()  # Εμφάνηση Αρχείων
-        self.edit_melanotainia.window = self.edit_melanotainies_window  # Αν θέλουμε να ανοιγουν πολλα παράθυρα
-        self.edit_melanotainies_window.show()
-        self.edit_melanotainia.window_closed.connect(self.refresh_melanotainies)
-
-    def refresh_melanotainies(self):
-        self.show_melanotainies(self.selected_table)
-        self.edit_melanotainies_window.close()
-
-    def show_edit_orders_window(self, item, column):  # column ειναι η στήλη που πατησε κλικ
-        item_id = item.text(0)
-        self.edit_orders_window = QWidget()
-        self.edit_orders = Ui_edit_orders_window()
-        self.edit_orders.setupUi(self.edit_orders_window)  # Αρχικοποιηση των κουμπιων, γραμμων επεξεργασίας κτλπ
-        self.edit_orders.selected_id = item_id
-        self.edit_orders.selected_table = self.selected_table
-        self.edit_orders.edit_order()  # Εμφάνηση δεδομένων απο την βάση δεδομένων
-        self.edit_orders.show_file()  # Εμφάνηση Αρχείων
-        self.edit_orders.window = self.edit_orders_window  # Αν θέλουμε να ανοιγουν πολλα παράθυρα
-        self.edit_orders_window.show()
-        self.edit_orders.window_closed.connect(self.refresh_orders)
+        if self.edit_spare_part_window is None:
+            self.edit_spare_part_window = QWidget()
+            self.edit_spare_part_window.setWindowTitle("Επεξεργασία πρώτου ανταλλακτικού")
+            self.edit_spare_part = Ui_edit_spare_parts_window()
+            self.edit_spare_part.setupUi(self.edit_spare_part_window)  # Αρχικοποιηση των κουμπιων, γραμμων επεξεργασίας κτλπ
+            self.edit_spare_part.selected_id = item_id
+            self.edit_spare_part.selected_table = self.selected_table
+            self.edit_spare_part.edit_spare_part()  # Εμφάνηση δεδομένων απο την βάση δεδομένων
+            self.edit_spare_part.show_file()  # Εμφάνηση Αρχείων
+            self.edit_spare_part.window = self.edit_spare_part_window  # Αν θέλουμε να ανοιγουν πολλα παράθυρα
+            self.edit_spare_part_window.show()
+            self.edit_spare_part.window_closed.connect(self.refresh_spare_parts)
+        elif self.second_edit_spare_part_window is None:
+            self.second_edit_spare_part_window = QWidget()
+            self.second_edit_spare_part_window.setWindowTitle(f"Επεξεργασία δεύτερου ανταλλακτικού")
+            self.second_edit_spare_part = Ui_edit_spare_parts_window()
+            self.second_edit_spare_part.setupUi(self.second_edit_spare_part_window)  # Αρχικοποιηση των κουμπιων, γραμμων επεξεργασίας κτλπ
+            self.second_edit_spare_part.selected_id = item_id
+            self.second_edit_spare_part.selected_table = self.selected_table
+            self.second_edit_spare_part.edit_spare_part()  # Εμφάνηση δεδομένων απο την βάση δεδομένων
+            self.second_edit_spare_part.show_file()  # Εμφάνηση Αρχείων
+            self.second_edit_spare_part.window = self.second_edit_spare_part_window  # Αν θέλουμε να ανοιγουν πολλα παράθυρα
+            self.second_edit_spare_part_window.show()
+            self.second_edit_spare_part.window_closed.connect(self.second_refresh_spare_parts)
+        else:
+            QtWidgets.QMessageBox.warning(None, 'Προσοχή!', f"Παρακαλώ κλείστε ενα απο τα ανοιχτά παράθυρα "
+                                                            f"ανταλλακτικών.")
+            return
 
     def refresh_spare_parts(self):
         self.show_spare_parts(self.selected_table)
         self.edit_spare_part_window.close()
+        self.edit_spare_part_window = None
+
+    def second_refresh_spare_parts(self):
+        self.show_spare_parts(self.selected_table)
+        self.second_edit_spare_part_window.close()
+        self.second_edit_spare_part_window = None
+
+    def new_refresh_spare_parts(self):
+        self.show_spare_parts(self.selected_table)
+        self.new_spare_part_window.close()
+        self.new_spare_part_window = None
+
+    def show_edit_consumables_window(self, item, column):
+        item_id = item.text(0)  # item.text(0)  == ID# column ειναι η στήλη που πατησε κλικ
+        if self.edit_consumables_window is None:
+            self.edit_consumables_window = QWidget()
+            self.edit_consumables_window.setWindowTitle(f"Επεξεργασία πρώτου αναλώσιμου")
+            self.edit_consumables_window.setStyleSheet(u"font: 75 13pt \"Calibri\";")
+            self.edit_consumable = Ui_edit_consumables_window()
+            # Αρχικοποιηση των κουμπιων, γραμμων επεξεργασίας κτλπ
+            self.edit_consumable.setupUi(self.edit_consumables_window)
+            self.edit_consumable.selected_id = item_id
+            self.edit_consumable.selected_table = self.selected_table
+            self.edit_consumable.edit_consumable()  # Εμφάνηση δεδομένων απο την βάση δεδομένων
+            self.edit_consumable.show_file()  # Εμφάνηση Αρχείων
+            self.edit_consumable.window = self.edit_consumables_window  # Αν θέλουμε να ανοιγουν πολλα παράθυρα
+            self.edit_consumables_window.show()
+            self.edit_consumable.window_closed.connect(self.refresh_consumables)
+        elif self.second_edit_consumables_window is None:
+            self.second_edit_consumables_window = QWidget()
+            self.second_edit_consumables_window.setWindowTitle(f"Επεξεργασία δεύτερου αναλώσιμου")
+            self.second_edit_consumables_window.setStyleSheet(u"font: 75 13pt \"Calibri\";")
+            self.second_edit_consumable = Ui_edit_consumables_window()
+            # Αρχικοποιηση των κουμπιων, γραμμων επεξεργασίας κτλπ
+            self.second_edit_consumable.setupUi(self.second_edit_consumables_window)
+            self.second_edit_consumable.selected_id = item_id
+            self.second_edit_consumable.selected_table = self.selected_table
+            self.second_edit_consumable.edit_consumable()  # Εμφάνηση δεδομένων απο την βάση δεδομένων
+            self.second_edit_consumable.show_file()  # Εμφάνηση Αρχείων
+            self.second_edit_consumable.window = self.second_edit_consumables_window  # Αν θέλουμε να ανοιγουν πολλα παράθυρα
+            self.second_edit_consumables_window.show()
+            self.second_edit_consumable.window_closed.connect(self.second_refresh_consumables)
+        elif self.third_edit_consumables_window is None:
+            self.third_edit_consumables_window = QWidget()
+            self.third_edit_consumables_window.setWindowTitle(f"Επεξεργασία τρίτου αναλώσιμου")
+            self.third_edit_consumables_window.setStyleSheet(u"font: 75 13pt \"Calibri\";")
+            self.third_edit_consumable = Ui_edit_consumables_window()
+            # Αρχικοποιηση των κουμπιων, γραμμων επεξεργασίας κτλπ
+            self.third_edit_consumable.setupUi(self.third_edit_consumables_window)
+            self.third_edit_consumable.selected_id = item_id
+            self.third_edit_consumable.selected_table = self.selected_table
+            self.third_edit_consumable.edit_consumable()  # Εμφάνηση δεδομένων απο την βάση δεδομένων
+            self.third_edit_consumable.show_file()  # Εμφάνηση Αρχείων
+            self.third_edit_consumable.window = self.third_edit_consumables_window  # Αν θέλουμε να ανοιγουν πολλα παράθυρα
+            self.third_edit_consumables_window.show()
+            self.third_edit_consumable.window_closed.connect(self.third_refresh_consumables)
+        else:
+            QtWidgets.QMessageBox.warning(None, 'Προσοχή!', f"Παρακαλώ κλείστε ενα απο τα ανοιχτά παράθυρα\n απο τα "
+                                                            f"αναλώσιμα")
+            return
+
+    def refresh_consumables(self):
+        self.show_consumables(self.selected_table)
+        self.edit_consumables_window.close()
+        self.edit_consumables_window = None
+
+    def second_refresh_consumables(self):
+        self.show_consumables(self.selected_table)
+        self.second_edit_consumables_window.close()
+        self.second_edit_consumables_window = None
+
+    def third_refresh_consumables(self):
+        self.show_consumables(self.selected_table)
+        self.third_edit_consumables_window.close()
+        self.third_edit_consumables_window = None
+
+    def new_refresh_consumables(self):
+        self.show_consumables(self.selected_table)
+        self.new_consumables_window.close()
+        self.new_consumables_window = None
+
+    def show_edit_melanotainies_window(self, item, column):  # column ειναι η στήλη που πατησε κλικ
+        item_id = item.text(0)  # item.text(0)  == ID
+        if self.edit_melanotainies_window is None:
+            self.edit_melanotainies_window = QWidget()
+            self.edit_melanotainies_window.setWindowTitle("Επεξεργασία πρώτης μελανοταινίας")
+            self.edit_melanotainies_window.setStyleSheet(u"font: 75 13pt \"Calibri\";")
+            self.edit_melanotainia = Ui_edit_melanotainies_window()
+            self.edit_melanotainia.setupUi(
+                self.edit_melanotainies_window)  # Αρχικοποιηση των κουμπιων, γραμμων επεξεργασίας κτλπ
+            self.edit_melanotainia.selected_id = item_id
+            self.edit_melanotainia.selected_table = self.selected_table
+            self.edit_melanotainia.edit_melanotainia()  # Εμφάνηση δεδομένων απο την βάση δεδομένων
+            self.edit_melanotainia.show_file()  # Εμφάνηση Αρχείων
+            self.edit_melanotainia.window = self.edit_melanotainies_window  # Αν θέλουμε να ανοιγουν πολλα παράθυρα
+            self.edit_melanotainies_window.show()
+            self.edit_melanotainia.window_closed.connect(self.refresh_melanotainies)
+        elif self.second_edit_melanotainies_window is None:
+            self.second_edit_melanotainies_window = QWidget()
+            self.second_edit_melanotainies_window.setWindowTitle("Επεξεργασία δεύτερης μελανοταινίας")
+            self.second_edit_melanotainies_window.setStyleSheet(u"font: 75 13pt \"Calibri\";")
+            self.second_edit_melanotainia = Ui_edit_melanotainies_window()
+            self.second_edit_melanotainia.setupUi(
+                self.second_edit_melanotainies_window)  # Αρχικοποιηση των κουμπιων, γραμμων επεξεργασίας κτλπ
+            self.second_edit_melanotainia.selected_id = item_id
+            self.second_edit_melanotainia.selected_table = self.selected_table
+            self.second_edit_melanotainia.edit_melanotainia()  # Εμφάνηση δεδομένων απο την βάση δεδομένων
+            self.second_edit_melanotainia.show_file()  # Εμφάνηση Αρχείων
+            self.second_edit_melanotainia.window = self.second_edit_melanotainies_window  # Αν θέλουμε να ανοιγουν πολλα παράθυρα
+            self.second_edit_melanotainies_window.show()
+            self.second_edit_melanotainia.window_closed.connect(self.second_refresh_melanotainies)
+        else:
+            QtWidgets.QMessageBox.warning(None, "Προσοχή!", f"Παρακαλώ κλείστε ενα απο τα ανοιχτά παράθυρα\n απο τις "
+                                                            f"μελανοταινίες.")
+            return
+
+    def refresh_melanotainies(self):
+        self.show_melanotainies(self.selected_table)
+        self.edit_melanotainies_window.close()
+        self.edit_melanotainies_window = None
+
+    def second_refresh_melanotainies(self):
+        self.show_melanotainies(self.selected_table)
+        self.second_edit_melanotainies_window.close()
+        self.second_edit_melanotainies_window = None
+
+    def new_refresh_melanotainies(self):
+        self.show_melanotainies(self.selected_table)
+        self.new_melanotainies_window.close()
+        self.new_melanotainies_window = None
+
+    def show_edit_orders_window(self, item, column):  # column ειναι η στήλη που πατησε κλικ
+        item_id = item.text(0)
+        if self.edit_orders_window is None:
+            self.edit_orders_window = QWidget()
+            self.edit_orders_window.setWindowTitle("Επεξεργασία πρώτης παραγγελίας")
+            self.edit_orders = Ui_edit_orders_window()
+            self.edit_orders.setupUi(self.edit_orders_window)  # Αρχικοποιηση των κουμπιων, γραμμων επεξεργασίας κτλπ
+            self.edit_orders.selected_id = item_id
+            self.edit_orders.selected_table = self.selected_table
+            self.edit_orders.edit_order()  # Εμφάνηση δεδομένων απο την βάση δεδομένων
+            self.edit_orders.show_file()  # Εμφάνηση Αρχείων
+            self.edit_orders.window = self.edit_orders_window  # Αν θέλουμε να ανοιγουν πολλα παράθυρα
+            self.edit_orders_window.show()
+            self.edit_orders.window_closed.connect(self.refresh_orders)
+        elif self.second_edit_orders_window is None:
+            self.second_edit_orders_window = QWidget()
+            self.second_edit_orders_window.setWindowTitle("Επεξεργασία δεύτερης παραγγελίας")
+            self.second_edit_orders = Ui_edit_orders_window()
+            self.second_edit_orders.setupUi(
+                self.second_edit_orders_window)  # Αρχικοποιηση των κουμπιων, γραμμων επεξεργασίας κτλπ
+            self.second_edit_orders.selected_id = item_id
+            self.second_edit_orders.selected_table = self.selected_table
+            self.second_edit_orders.edit_order()  # Εμφάνηση δεδομένων απο την βάση δεδομένων
+            self.second_edit_orders.show_file()  # Εμφάνηση Αρχείων
+            self.second_edit_orders.window = self.second_edit_orders_window  # Αν θέλουμε να ανοιγουν πολλα παράθυρα
+            self.second_edit_orders_window.show()
+            self.second_edit_orders.window_closed.connect(self.second_refresh_orders)
+        else:
+            QtWidgets.QMessageBox.warning(None, "Προσοχή!", f"Παρακαλώ κλείστε ενα απο τα ανοιχτά παράθυρα\n απο τις "
+                                                            f"παραγγελίες.")
+            return
 
     def refresh_orders(self):
         self.show_orders(self.selected_table)
         self.edit_orders_window.close()  # Να μήν κλείνει το παράθυρο γιατι κλεινει λαθος παράθυρο καμια φορά
+        self.edit_orders_window = None
 
+    def second_refresh_orders(self):
+        self.show_orders(self.selected_table)
+        self.second_edit_orders_window.close()  # Να μήν κλείνει το παράθυρο γιατι κλεινει λαθος παράθυρο καμια φορά
+        self.second_edit_orders_window = None
+
+    def new_refresh_orders(self):
+        self.show_orders(self.selected_table)
+        self.new_orders_window.close()  # Να μήν κλείνει το παράθυρο γιατι κλεινει λαθος παράθυρο καμια φορά
+        self.new_orders_window = None
 
     def delete_orders(self):
         answer = QtWidgets.QMessageBox.warning(None, 'Προσοχή!', f"Σίγουρα θέλετε να διαγράψετε όλες τις παραγγελίες;",
@@ -894,10 +1057,9 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
             f"image: url(icons/{self.selected_table_label.text()}.png);" "background-color: #aaff7f;" "color: white;" "border-style: outset;" "border-width: 2px;" \
             "border-radius: 15px;" "border-color: black;" "padding: 4px;")
 
-        # self.selected_table_label.setStyleSheet(f"image: url(icons/{self.selected_table_label.text()}.png);" "background-color: #aaff7f;" "color: white;" "border-style: outset;" "border-width: 2px;" \
-        #                           "border-radius: 15px;" "border-color: black;" "padding: 4px;")
-        # self.selected_table_label.setText("")
-        # needed
+        # self.selected_table_label.setStyleSheet(f"image: url(icons/{self.selected_table_label.text()}.png);"
+        # "background-color: #aaff7f;" "color: white;" "border-style: outset;" "border-width: 2px;" \ "border-radius:
+        # 15px;" "border-color: black;" "padding: 4px;") self.selected_table_label.setText("") needed
         for btn in all_btn:
             if btn in up_btn and btn != pressed_btn:
 
@@ -910,56 +1072,82 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
                     "border-radius: 15px;" "border-color: black;" "padding: 4px;")
 
     def add_spare_part(self):
-        if self.selected_table == None:
+        if self.selected_table is None:
             QtWidgets.QMessageBox.warning(None, 'Προσοχή!', f"Πρέπει πρώτα να επιλέξετε πίνακα!")
             return
         if self.selected_table_label.text() == "ΠΑΡΑΓΓΕΛΙΕΣ":
-            self.edit_orders_window = QWidget()
-            self.edit_orders = Ui_edit_orders_window()
-            self.edit_orders.setupUi(self.edit_orders_window)  # Αρχικοποιηση των κουμπιων, γραμμων επεξεργασίας κτλπ
-            self.edit_orders.selected_table = self.selected_table
-            self.edit_orders.hide_buttons()  # Αποκρυψη κουμπιών αρχείου
-            # self.edit_orders.show_file()  # Εμφάνηση Αρχείων
-            self.edit_orders.window = self.edit_orders_window
-            self.edit_orders_window.show()
-            self.edit_orders.window_closed.connect(self.refresh_orders)
+            if self.new_orders_window is not None:
+                QtWidgets.QMessageBox.warning(None, 'Προσοχή!', f"Έχετε ήδη ανοιχτό παράθυρο προσθήκης παραγγελίας\n"
+                                                                f"Παρακαλώ κλείστε πρώτα το παράθυρο προσθήκης "
+                                                                f"παραγγελίας")
+                return
+            else:
+                self.new_orders_window = QWidget()
+                self.new_orders_window.setWindowTitle(f"Προσθήκη παραγγελίας")
+                self.new_order = Ui_edit_orders_window()
+                self.new_order.setupUi(self.new_orders_window)  # Αρχικοποιηση των κουμπιων, γραμμων επεξεργασίας κτλπ
+                self.new_order.selected_table = self.selected_table
+                self.new_order.hide_buttons()  # Αποκρυψη κουμπιών αρχείου
+                # self.edit_orders.show_file()  # Εμφάνηση Αρχείων
+                self.new_order.window = self.new_orders_window
+                self.new_orders_window.show()
+                self.new_order.window_closed.connect(self.new_refresh_orders)
 
         elif self.selected_table_label.text() == "ΜΕΛΑΝΑΚΙΑ" or self.selected_table_label.text() == "ΤΟΝΕΡ" \
                 or self.selected_table_label.text() == "ΦΩΤΟΤΥΠΙΚΑ":
-            self.edit_consumables_window = QWidget()
-            self.edit_consumables_window.setStyleSheet(u"font: 75 13pt \"Calibri\";")
-            self.edit_consumable = Ui_edit_consumables_window()
-            self.edit_consumable.setupUi(
-                self.edit_consumables_window)  # Αρχικοποιηση των κουμπιων, γραμμων επεξεργασίας κτλπ
-            self.edit_consumable.selected_table = self.selected_table
-            self.edit_consumable.hide_buttons()  # Εμφάνηση δεδομένων απο την βάση δεδομένων
-            self.edit_consumable.window = self.edit_consumables_window
-            self.edit_consumables_window.show()
-            self.edit_consumable.window_closed.connect(self.refresh_consumables)
+            if self.new_consumables_window is not None:
+                QtWidgets.QMessageBox.warning(None, 'Προσοχή!', f"Έχετε ήδη ανοιχτό παράθυρο προσθήκης αναλώσιμου\n"
+                                                                f"Παρακαλώ κλείστε πρώτα το παράθυρο προσθήκης "
+                                                                f"αναλώσιμου")
+                return
+            else:
+                self.new_consumables_window = QWidget()
+                self.new_consumables_window.setWindowTitle(f"Προσθήκη {self.selected_table_label.text()}")
+                self.new_consumables_window.setStyleSheet(u"font: 75 13pt \"Calibri\";")
+                self.new_consumable = Ui_edit_consumables_window()
+                self.new_consumable.setupUi(self.new_consumables_window)  # Αρχικοποιηση των κουμπιων, γραμμων επεξεργασίας κτλπ
+                self.new_consumable.selected_table = self.selected_table
+                self.new_consumable.hide_buttons()  # Εμφάνηση δεδομένων απο την βάση δεδομένων
+                self.new_consumable.window = self.new_consumables_window
+                self.new_consumables_window.show()
+                self.new_consumable.window_closed.connect(self.new_refresh_consumables)
 
         elif self.selected_table_label.text() == "ΜΕΛΑΝΟΤΑΙΝΙΕΣ":
-            self.edit_melanotainies_window = QWidget()
-            self.edit_melanotainies_window.setStyleSheet(u"font: 75 13pt \"Calibri\";")
-            self.edit_melanotainia = Ui_edit_melanotainies_window()
-            self.edit_melanotainia.setupUi(
-                self.edit_melanotainies_window)  # Αρχικοποιηση των κουμπιων, γραμμων επεξεργασίας κτλπ
-            self.edit_melanotainia.selected_table = self.selected_table
-            self.edit_melanotainia.hide_buttons()  # Hide buttons
-            # self.edit_melanotainia.show_file()  # Εμφάνηση Αρχείων
-            self.edit_melanotainia.window = self.edit_melanotainies_window
-            self.edit_melanotainies_window.show()
-            self.edit_melanotainia.window_closed.connect(self.refresh_melanotainies)
+            if self.new_melanotainies_window is not None:
+                QtWidgets.QMessageBox.warning(None, 'Προσοχή!', f"Έχετε ήδη ανοιχτό παράθυρο προσθήκης "
+                                                                f"{self.selected_table_label.text()}\n"
+                                                                f"Παρακαλώ κλείστε πρώτα το παράθυρο προσθήκης "
+                                                                f"{self.selected_table_label.text()}")
+                return
+            else:
+                self.new_melanotainies_window = QWidget()
+                self.new_melanotainies_window.setWindowTitle("Προσθήκη μελανοταινίας")
+                self.new_melanotainies_window.setStyleSheet(u"font: 75 13pt \"Calibri\";")
+                self.new_melanotainia = Ui_edit_melanotainies_window()
+                self.new_melanotainia.setupUi(self.new_melanotainies_window)  # Αρχικοποιηση των κουμπιων, γραμμων επεξεργασίας κτλπ
+                self.new_melanotainia.selected_table = self.selected_table
+                self.new_melanotainia.hide_buttons()  # Hide buttons
+                # self.edit_melanotainia.show_file()  # Εμφάνηση Αρχείων
+                self.new_melanotainia.window = self.new_melanotainies_window
+                self.new_melanotainies_window.show()
+                self.new_melanotainia.window_closed.connect(self.new_refresh_melanotainies)
         else:
-            self.edit_spare_part_window = QWidget()
-            self.edit_spare_part = Ui_edit_spare_parts_window()
-            self.edit_spare_part.setupUi(
-                self.edit_spare_part_window)  # Αρχικοποιηση των κουμπιων, γραμμων επεξεργασίας κτλπ
-            self.edit_spare_part.selected_table = self.selected_table
-            self.edit_spare_part.hide_buttons()  # Hide buttons
-            # self.edit_spare_part.show_file()  # Εμφάνηση Αρχείων
-            self.edit_spare_part.window = self.edit_spare_part_window
-            self.edit_spare_part_window.show()
-            self.edit_spare_part.window_closed.connect(self.refresh_spare_parts)
+            if self.new_spare_part_window is not None:
+                QtWidgets.QMessageBox.warning(None, 'Προσοχή!', f"Έχετε ήδη ανοιχτό παράθυρο προσθήκης ανταλλακτικού\n"
+                                                                f"Παρακαλώ κλείστε πρώτα το παράθυρο προσθήκης "
+                                                                f"ανταλλακτικού")
+                return
+            else:
+                self.new_spare_part_window = QWidget()
+                self.new_spare_part_window.setWindowTitle(f"Προσθήκη {self.selected_table_label.text()} ανταλλακτικού")
+                self.new_spare_part = Ui_edit_spare_parts_window()
+                self.new_spare_part.setupUi(self.new_spare_part_window)  # Αρχικοποιηση των κουμπιων, γραμμων επεξεργασίας κτλπ
+                self.new_spare_part.selected_table = self.selected_table
+                self.new_spare_part.hide_buttons()  # Hide buttons
+                # self.edit_spare_part.show_file()  # Εμφάνηση Αρχείων
+                self.new_spare_part.window = self.new_spare_part_window
+                self.new_spare_part_window.show()
+                self.new_spare_part.window_closed.connect(self.new_refresh_spare_parts)
 
     def quit(self, *args):
         answer = QtWidgets.QMessageBox.warning(None, 'Προσοχή!', f"Σίγουρα θέλετε να κλείσεται την αποθήκη;",
@@ -994,7 +1182,8 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
         today_str = today.replace('/', '-')
         try:
             #  file_to_save == ('/home/dannys/Desktop/add_files.png', '')
-            file_to_save = QtWidgets.QFileDialog.getSaveFileName(self, 'Αποθήκευση αρχείου', f'{file_whithout_extension[0]}'
+            file_to_save = QtWidgets.QFileDialog.getSaveFileName(self, 'Αποθήκευση αρχείου',
+                                                                 f'{file_whithout_extension[0]}'
                                                                  + '_backup_' + f"{today_str}" + f'{extension}')
 
             if file_to_save[0] == "":  # file_to_save == ('', '') αν πατήση ακυρο ο χρήστης
@@ -1002,13 +1191,13 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
 
             shutil.copy(os.path.abspath(DB), file_to_save[0], follow_symlinks=False)
             QtWidgets.QMessageBox.information(None, "Επιτυχία", f'Το αρχεία {file_to_save[0]} αποθηκεύτηκε '
-                                                      f'επιτυχώς')
+                                                                f'επιτυχώς')
         except TypeError:  # Αν δεν πατησει αποθήκευση
             return
 
     def info(self):
         QtWidgets.QMessageBox.about(None, 'Σχετικά',
-                          f"""Author     : Jordanis Ntini<br>
+                                    f"""Author     : Jordanis Ntini<br>
                                     Copyright  : Copyright © 2021<br>
                                     Credits    : ['Athanasia Tzampazi']<br>
                                     Version    : '{VERSION}'<br>

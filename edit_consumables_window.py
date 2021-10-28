@@ -260,7 +260,7 @@ class Ui_edit_consumables_window(QtWidgets.QMainWindow):   # Πρέπει να �
 
     def retranslateUi(self, edit_consumables_window):
         _translate = QtCore.QCoreApplication.translate
-        edit_consumables_window.setWindowTitle(_translate("edit_consumables_window", "Επεξεργασία αναλώσιμου"))
+        # edit_consumables_window.setWindowTitle(_translate("edit_consumables_window", "Επεξεργασία αναλώσιμου"))
         self.customers_label.setText(_translate("edit_consumables_window", "Πελάτες"))
         self.quality_label.setText(_translate("edit_consumables_window", "Ποιότητα"))
         self.code_label.setText(_translate("edit_consumables_window", "Κωδικός"))
@@ -495,15 +495,24 @@ class Ui_edit_consumables_window(QtWidgets.QMainWindow):   # Πρέπει να �
             self.show_file()
 
     def save_changes(self):
+        # Ελεγχος αν έχει κωδικό
+        if self.code_lineEdit.text() == "" or self.code_lineEdit.text() is None:
+            QtWidgets.QMessageBox.warning(None, "Προσοχή", "Το πεδίο κωδικός δεν μπορεί να είναι κενό."
+                                                           "\nΠαρακαλώ ορίστε κωδικό για το προιόν!")
+            return
         try:
             # set data to object
+            # Ελεγχος τεμαχίων
             if self.pieces_lineEdit.text() == "" or self.pieces_lineEdit.text() is None:
                 pieces = "0"
             else:
                 pieces = self.pieces_lineEdit.text()
-            price = self.price_lineEdit.text()
+            # Ελεγχος τιμής
+            if self.price_lineEdit.text() == "" or self.price_lineEdit.text() is None:
+                price = "0"
+            else:
+                price = self.price_lineEdit.text()
             price = "{:.2f}".format(float(price.replace("€", "").replace(",", "."))) + " €"
-
             try:
                 total = int(pieces) * int(float(self.price_lineEdit.text().replace(" €", "").replace(",", ".").strip()))
                 total = f"{total:.2f} €"
@@ -513,7 +522,6 @@ class Ui_edit_consumables_window(QtWidgets.QMainWindow):   # Πρέπει να �
             # ελεγχος αν είναι να προσθέσουμε καινούριο προιόν
             if self.item is None:
                 # Φτιάχνουμε νέο object
-
                 self.item = self.selected_table(ΕΤΑΙΡΕΙΑ=self.company_lineEdit.text(), ΠΟΙΟΤΗΤΑ=self.quality_lineEdit.text(),
                                                 ΑΝΑΛΩΣΙΜΟ=self.consumable_lineEdit.text(),
                                                 ΠΕΡΙΓΡΑΦΗ=self.description_textEdit.toPlainText(),

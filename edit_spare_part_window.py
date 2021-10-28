@@ -23,6 +23,7 @@ from db import Brother, Canon, Epson, Konica, Kyocera, Lexmark, Oki, Ricoh, Sams
 sys.stderr.write = root_logger.error
 sys.stdout.write = root_logger.info
 
+
 class Ui_edit_spare_parts_window(QMainWindow):  # Πρέπει να κληρονομήσει απο QMainWindow for pyqtSignal to work
     window_closed = pyqtSignal()  # Το Signal πρεπει να είναι εκτός __init__ δεν δουλευει αλλιως
 
@@ -65,11 +66,12 @@ class Ui_edit_spare_parts_window(QMainWindow):  # Πρέπει να κληρον
         # Part no
         self.part_no_label = QtWidgets.QLabel(edit_spare_parts_window)
         # self.part_no_label.setSizePolicy(sizePolicy)
-        self.part_no_label.setStyleSheet("font: 75 14pt \"Calibri\";")
+        self.part_no_label.setStyleSheet("font: 75 14pt \"Calibri\";" "qproperty-iconSize: 40px")
         self.part_no_label.setObjectName("part_no_label")
         self.part_no_label.setMaximumSize(QtCore.QSize(16777215, 30))
         self.part_no_label.setMinimumSize(QtCore.QSize(16777215, 30))
         self.gridLayout.addWidget(self.part_no_label, 0, 0, 1, 1)
+
         self.lineEdit_part_no = QtWidgets.QLineEdit(edit_spare_parts_window)
         self.lineEdit_part_no.setSizePolicy(sizePolicy)
         self.lineEdit_part_no.setStyleSheet("font: 75 12pt \"Calibri\";")
@@ -301,7 +303,10 @@ class Ui_edit_spare_parts_window(QMainWindow):  # Πρέπει να κληρον
 
     def retranslateUi(self, edit_spare_parts_window):
         _translate = QtCore.QCoreApplication.translate
-        edit_spare_parts_window.setWindowTitle(_translate("edit_spare_parts_window", "Επεξεργασία ανταλλακτικού"))
+        # if self.selected_id is None:
+        #     edit_spare_parts_window.setWindowTitle(_translate("edit_spare_parts_window", "Προσθήκη ανταλλακτικού"))
+        # else:
+        #     edit_spare_parts_window.setWindowTitle(_translate("edit_spare_parts_window", "Επεξεργασία ανταλλακτικού"))
         self.previous_image_btn.setText(_translate("edit_spare_parts_window", "Προηγούμενη"))
         self.next_image_btn.setText(_translate("edit_spare_parts_window", "Επόμενη"))
         self.comments_label.setText(_translate("edit_spare_parts_window", "Σχόλια"))
@@ -338,6 +343,9 @@ class Ui_edit_spare_parts_window(QMainWindow):  # Πρέπει να κληρον
             self.files = os.listdir(self.images_path)
 
     def save_changes(self):
+        if self.lineEdit_code.text() is None or self.lineEdit_code.text() == "":
+            QtWidgets.QMessageBox.warning(None, "Προσοχή!", "Ο κωδικός δεν μπορεί να είναι κενός!")
+            return
         if self.lineEdit_pieces.text() == "" or self.lineEdit_pieces.text() is None:
             pieces = "0"
         else:

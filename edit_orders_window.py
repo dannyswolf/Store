@@ -252,7 +252,7 @@ class Ui_edit_orders_window(QMainWindow):  # Πρέπει να κληρονομ�
 
     def retranslateUi(self, edit_orders_window):
         _translate = QtCore.QCoreApplication.translate
-        edit_orders_window.setWindowTitle(_translate("edit_orders_window", "Επεξεργασία παραγγελίας"))
+        # edit_orders_window.setWindowTitle(_translate("edit_orders_window", "Επεξεργασία παραγγελίας"))
         self.previous_image_btn.setText(_translate("edit_orders_window", "Προηγούμενη"))
         self.next_image_btn.setText(_translate("edit_orders_window", "Επόμενη"))
         self.comments_label.setText(_translate("edit_orders_window", "Σχόλια"))
@@ -302,6 +302,9 @@ class Ui_edit_orders_window(QMainWindow):  # Πρέπει να κληρονομ�
             return
 
     def save_changes(self):
+        if self.lineEdit_code.text() is None or self.lineEdit_code.text() == "":
+            QtWidgets.QMessageBox.warning(None, "Προσοχή!", "Ο κωδικός δεν μπορεί να είναι κενός!")
+            return
         try:
             # get data from edit lines
             self.date = self.calendarWidget.selectedDate().toString('dd/MM/yyyy')
