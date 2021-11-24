@@ -1,10 +1,8 @@
-
 from settings import DB
 import traceback
-from sqlalchemy import create_engine, Column, Integer, Text, select
+from sqlalchemy import create_engine, Column, Integer, Text, asc, select
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
-
 
 engine = create_engine(f"sqlite:///{DB}")
 session = sessionmaker(bind=engine)()
@@ -28,6 +26,8 @@ def get_spare_part_to_edit(table, item_id):
     except Exception:
         print(traceback.print_exc())
         return
+
+
 # Tables
 class Brother(base):
     __tablename__ = 'BROTHER'
@@ -192,7 +192,6 @@ class Samsung(base):
     ΤΕΜΑΧΙΑ = Column(Text)
     ΠΑΡΑΤΗΡΗΣΗΣ = Column(Text)
 
-
     def __repr__(self):
         return "<Samsung(id='%i', PARTS_NR='%s', ΠΕΡΙΓΡΑΦΗ='%s', ΚΩΔΙΚΟΣ='%s', ΤΕΜΑΧΙΑ='%s', ΠΑΡΑΤΗΡΗΣΗΣ='%s')>" \
                % (self.ID, self.PARTS_NR, self.ΠΕΡΙΓΡΑΦΗ, self.ΚΩΔΙΚΟΣ, self.ΤΕΜΑΧΙΑ, self.ΠΑΡΑΤΗΡΗΣΗΣ)
@@ -342,13 +341,58 @@ class Orders(base):
     ΑΠΟΤΕΛΕΣΜΑ = Column(Text)
     ΠΑΡΑΤΗΡΗΣΕΙΣ = Column(Text)
     images = Column(Text)
+
     # image = Column(Text)
 
     def __repr__(self):
         return "<Orders(id='%i', ΚΩΔΙΚΟΣ='%s', ΗΜΕΡΟΜΗΝΙΑ='%s', ΠΕΡΙΓΡΑΦΗ='%s', ΑΠΟΤΕΛΕΣΜΑ='%s', ΠΑΡΑΤΗΡΗΣΕΙΣ='%s'\
         images='%s')>" \
-               % (self.ID, self.ΚΩΔΙΚΟΣ, self.ΗΜΕΡΟΜΗΝΙΑ, self.ΠΕΡΙΓΡΑΦΗ, self.ΑΠΟΤΕΛΕΣΜΑ, self.ΠΑΡΑΤΗΡΗΣΕΙΣ, self.images)
+               % (
+               self.ID, self.ΚΩΔΙΚΟΣ, self.ΗΜΕΡΟΜΗΝΙΑ, self.ΠΕΡΙΓΡΑΦΗ, self.ΑΠΟΤΕΛΕΣΜΑ, self.ΠΑΡΑΤΗΡΗΣΕΙΣ, self.images)
 
     def __str__(self):
         return f"{self.ΚΩΔΙΚΟΣ} {self.ΗΜΕΡΟΜΗΝΙΑ} {self.ΠΕΡΙΓΡΑΦΗ} {self.ΑΠΟΤΕΛΕΣΜΑ} {self.ΠΑΡΑΤΗΡΗΣΕΙΣ} {self.images}"
 
+
+def search_on_spare_parts(table, text_to_search):
+    last_like = f"%{text_to_search.upper()}%"  # για να τα κάνει κεφαλαία αν γράψουμε με μικρά
+    # στήν βάση είναι ολλα κεφαλαία αρα θελει κεφαλαία για να βρει
+    try:
+        parts = session.query(table).filter((table.PARTS_NR.ilike(last_like)) |
+                                            (table.ΠΕΡΙΓΡΑΦΗ.ilike(last_like)) |
+                                            (table.ΚΩΔΙΚΟΣ.ilike(last_like))). \
+            order_by(asc(table.ΠΕΡΙΓΡΑΦΗ))
+
+        return parts
+    except Exception:
+        traceback.print_exc()
+        return
+
+
+def search_on_consumables(table, text_to_search):
+    last_like = f"%{text_to_search.upper()}%"  # για να τα κάνει κεφαλαία αν γράψουμε με μικρά
+    # στήν βάση είναι ολλα κεφαλαία αρα θελει κεφαλαία για να βρει
+    try:
+        parts = session.query(table).filter((table.ΠΕΡΙΓΡΑΦΗ.ilike(last_like)) |
+                                            (table.ΚΩΔΙΚΟΣ.ilike(last_like)) |
+                                            (table.ΠΕΛΑΤΕΣ.ilike(last_like))). \
+            order_by(asc(table.ΠΕΡΙΓΡΑΦΗ))
+
+        return parts
+    except Exception:
+        traceback.print_exc()
+        return
+
+
+def search_on_orders(text_to_search):
+    last_like = f"%{text_to_search.upper()}%"  # για να τα κάνει κεφαλαία αν γράψουμε με μικρά
+    # στήν βάση είναι ολλα κεφαλαία αρα θελει κεφαλαία για να βρει
+    try:
+        parts = session.query(Orders).filter((Orders.ΠΕΡΙΓΡΑΦΗ.ilike(last_like)) |
+                                             (Orders.ΚΩΔΙΚΟΣ.ilike(last_like))). \
+            order_by(asc(Orders.ΠΕΡΙΓΡΑΦΗ))
+
+        return parts
+    except Exception:
+        traceback.print_exc()
+        return

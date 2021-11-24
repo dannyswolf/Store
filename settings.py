@@ -8,7 +8,7 @@ today = datetime.today().strftime('%d/%m/%Y')
 today_str = today.replace("/", "-")
 now = datetime.now()
 now_str = now.strftime("%H-%M-%S")
-VERSION = "V 1.0.8"
+VERSION = "V 1.0.9"
 log_dir = "logs" + "/" + today.replace("/", "_") + "/"
 if not os.path.exists(log_dir):
     os.makedirs(log_dir)

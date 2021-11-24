@@ -14,6 +14,7 @@
 # για να ανοιξουμε πολλά παράθυρα βαζουμε  # self.edit_spare_part.window = self.edit_spare_part_window
 # ετσι  δημουργούμε κάθε φορά νεο παράθυρο
 ##############################################################################################
+# Version = 1.0.9 Search with sqlalchemy
 # Version = 1.0.8 Fix closed windows with X
 # Version = 1.0.7 Check for double part no + κωδικούς and search with re.sub()
 # Version = 1.0.6 Διαχείριση πολλαπλών παραθύρων
@@ -27,8 +28,9 @@
 # VERSION = "V 0.3.1"  Μελανοταινίες ready και κουμπια διαγραφών παραγγελιών
 # VERSION = "V 0.2.1"  Consumables ready
 
+import time
 # Database
-from db import get_spare_parts, DB, select, conn, Orders
+from db import get_spare_parts, DB, select, conn, Orders, search_on_spare_parts, search_on_consumables, search_on_orders
 
 # Settings
 from settings import VERSION, today, root_logger
@@ -133,93 +135,98 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
         self.gridLayout.setObjectName("gridLayout")
 
         # Brother
-        self.brother_btn = QtWidgets.QPushButton(self.centralwidget)
+        self.brother_btn = QtWidgets.QToolButton(self.centralwidget)
+        icon8 = QtGui.QIcon()
+        icon8.addPixmap(QtGui.QPixmap("icons/BROTHER.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.brother_btn.setIcon(icon8)
         self.brother_btn.setMinimumSize(QtCore.QSize(0, 50))
-        self.brother_btn.setStatusTip("")
-        self.brother_btn.setWhatsThis("BROTHER.png")
-        self.brother_btn.setAccessibleName("")
-        self.brother_btn.setAccessibleDescription("")
         # self.brother_btn.setStyleSheet("image: url(icons/BROTHER.png);""border-radius : 1; border : 1px solid black")
-        self.brother_btn.setStyleSheet(
-            "image: url(icons/BROTHER.png);" "background-color: #fff;" "color: white;" "border-style: outset;" "border-width: 2px;" \
+        self.brother_btn.setStyleSheet("background-color: #fff;" "color: white;" "border-style: outset;" "border-width: 2px;" \
             "border-radius: 15px;" "border-color: black;" "padding: 2px;")
-        self.brother_btn.setIconSize(QtCore.QSize(0, 50))
+        self.brother_btn.setIconSize(QtCore.QSize(120, 50))
         self.brother_btn.setObjectName("brother_btn")
         self.brother_btn.clicked.connect(lambda: self.show_spare_parts(Brother))
         self.gridLayout.addWidget(self.brother_btn, 0, 0, 1, 1)
 
         # Canon
-        self.canon_btn = QtWidgets.QPushButton(self.centralwidget)
-        self.canon_btn.setMinimumSize(QtCore.QSize(0, 50))
-        self.canon_btn.setStyleSheet(
-            "image: url(icons/CANON.png);" "background-color: #fff;" "color: white;" "border-style: outset;" "border-width: 2px;" \
+        self.canon_btn = QtWidgets.QToolButton(self.centralwidget)
+        icon3 = QtGui.QIcon()
+        icon3.addPixmap(QtGui.QPixmap("icons/CANON.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.canon_btn.setIcon(icon3)
+        self.canon_btn.setIconSize(QtCore.QSize(120, 50))
+        self.canon_btn.setStyleSheet("background-color: #fff;" "color: white;" "border-style: outset;" "border-width: 2px;" \
             "border-radius: 15px;" "border-color: black;" "padding: 2px;")
         self.canon_btn.setObjectName("canon_btn")
-        self.canon_btn.setWhatsThis("CANON.png")
         self.canon_btn.clicked.connect(lambda: self.show_spare_parts(Canon))
         self.gridLayout.addWidget(self.canon_btn, 0, 1, 1, 1)
 
         # Epson
-        self.epson_btn = QtWidgets.QPushButton(self.centralwidget)
-        self.epson_btn.setMinimumSize(QtCore.QSize(0, 50))
-        self.epson_btn.setStyleSheet(
-            "image: url(icons/EPSON.png);" "background-color: #fff;" "color: white;" "border-style: outset;" "border-width: 2px;" \
+        self.epson_btn = QtWidgets.QToolButton(self.centralwidget)
+        icon2 = QtGui.QIcon()
+        icon2.addPixmap(QtGui.QPixmap("icons/EPSON.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.epson_btn.setIcon(icon2)
+        self.epson_btn.setIconSize(QtCore.QSize(120, 50))
+        self.epson_btn.setStyleSheet("background-color: #fff;" "color: white;" "border-style: outset;" "border-width: 2px;" \
             "border-radius: 15px;" "border-color: black;" "padding: 2px;")
         self.epson_btn.setObjectName("epson_btn")
-        self.epson_btn.setWhatsThis("EPSON.png")
         self.epson_btn.clicked.connect(lambda: self.show_spare_parts(Epson))
         self.gridLayout.addWidget(self.epson_btn, 0, 2, 1, 1)
 
         # Konica
-        self.konica_btn = QtWidgets.QPushButton(self.centralwidget)
-        self.konica_btn.setMinimumSize(QtCore.QSize(0, 50))
-        self.konica_btn.setStyleSheet(
-            "image: url(icons/KONICA.png);" "background-color: #fff;" "color: white;" "border-style: outset;" "border-width: 2px;" \
+        self.konica_btn = QtWidgets.QToolButton(self.centralwidget)
+        icon6 = QtGui.QIcon()
+        icon6.addPixmap(QtGui.QPixmap("icons/KONICA.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.konica_btn.setIcon(icon6)
+        self.konica_btn.setIconSize(QtCore.QSize(120, 50))
+        self.konica_btn.setStyleSheet("background-color: #fff;" "color: white;" "border-style: outset;" "border-width: 2px;" \
             "border-radius: 15px;" "border-color: black;" "padding: 0px;")
-        self.konica_btn.setWhatsThis("KONICA.png")
         self.konica_btn.setObjectName("konica_btn")
         self.konica_btn.clicked.connect(lambda: self.show_spare_parts(Konica))
         self.gridLayout.addWidget(self.konica_btn, 0, 3, 1, 1)
 
         # Kyocera
-        self.kyocera_btn = QtWidgets.QPushButton(self.centralwidget)
-        self.kyocera_btn.setMinimumSize(QtCore.QSize(0, 50))
-        self.kyocera_btn.setStyleSheet(
-            "image: url(icons/KYOCERA.png);" "background-color: #fff;" "color: white;" "border-style: outset;" "border-width: 2px;" \
+        self.kyocera_btn = QtWidgets.QToolButton(self.centralwidget)
+        icon7 = QtGui.QIcon()
+        icon7.addPixmap(QtGui.QPixmap("icons/KYOCERA.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.kyocera_btn.setIcon(icon7)
+        self.kyocera_btn.setIconSize(QtCore.QSize(120, 50))
+        self.kyocera_btn.setStyleSheet("background-color: #fff;" "color: white;" "border-style: outset;" "border-width: 2px;" \
             "border-radius: 15px;" "border-color: black;" "padding: 2px;")
-
-        self.kyocera_btn.setWhatsThis("KYOCERA.png")
         self.kyocera_btn.setObjectName("kyocera_btn")
         self.kyocera_btn.clicked.connect(lambda: self.show_spare_parts(Kyocera))
         self.gridLayout.addWidget(self.kyocera_btn, 0, 4, 1, 1)
 
         # Lexmark
-        self.lexmark_btn = QtWidgets.QPushButton(self.centralwidget)
-        self.lexmark_btn.setMinimumSize(QtCore.QSize(0, 50))
-        self.lexmark_btn.setStyleSheet(
-            "image: url(icons/LEXMARK.png);" "background-color: #fff;" "color: white;" "border-style: outset;" "border-width: 2px;" \
+        self.lexmark_btn = QtWidgets.QToolButton(self.centralwidget)
+        icon4 = QtGui.QIcon()
+        icon4.addPixmap(QtGui.QPixmap("icons/LEXMARK.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.lexmark_btn.setIcon(icon4)
+        self.lexmark_btn.setIconSize(QtCore.QSize(120, 50))
+        self.lexmark_btn.setStyleSheet("background-color: #fff;" "color: white;" "border-style: outset;" "border-width: 2px;" \
             "border-radius: 15px;" "border-color: black;" "padding: 2px;")
-        self.lexmark_btn.setWhatsThis("LEXMARK.png")
         self.lexmark_btn.setObjectName("lexmark_btn")
         self.lexmark_btn.clicked.connect(lambda: self.show_spare_parts(Lexmark))
         self.gridLayout.addWidget(self.lexmark_btn, 0, 5, 1, 1)
 
         # Oki
-        self.oki_btn = QtWidgets.QPushButton(self.centralwidget)
-        self.oki_btn.setMinimumSize(QtCore.QSize(0, 50))
-        self.oki_btn.setStyleSheet(
-            "image: url(icons/OKI.png);" "background-color: #fff;" "color: white;" "border-style: outset;" "border-width: 2px;" \
+        self.oki_btn = QtWidgets.QToolButton(self.centralwidget)
+        icon5 = QtGui.QIcon()
+        icon5.addPixmap(QtGui.QPixmap("icons/OKI.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.oki_btn.setIcon(icon5)
+        self.oki_btn.setIconSize(QtCore.QSize(120, 50))
+        self.oki_btn.setStyleSheet("background-color: #fff;" "color: white;" "border-style: outset;" "border-width: 2px;" \
             "border-radius: 15px;" "border-color: black;" "padding: 2px;")
-        self.oki_btn.setWhatsThis("OKI.png")
         self.oki_btn.setObjectName("oki_btn")
         self.oki_btn.clicked.connect(lambda: self.show_spare_parts(Oki))
         self.gridLayout.addWidget(self.oki_btn, 0, 6, 1, 1)
 
         # Ricoh
-        self.ricoh_btn = QtWidgets.QPushButton(self.centralwidget)
-        self.ricoh_btn.setMinimumSize(QtCore.QSize(0, 50))
-        self.ricoh_btn.setStyleSheet(
-            "image: url(icons/RICOH.png);" "background-color: #fff;" "color: white;" "border-style: outset;" "border-width: 2px;" \
+        self.ricoh_btn = QtWidgets.QToolButton(self.centralwidget)
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap("icons/RICOH.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.ricoh_btn.setIcon(icon)
+        self.ricoh_btn.setIconSize(QtCore.QSize(120, 50))
+        self.ricoh_btn.setStyleSheet("background-color: #fff;" "color: white;" "border-style: outset;" "border-width: 2px;" \
             "border-radius: 15px;" "border-color: black;" "padding: 2px;")
         self.ricoh_btn.setWhatsThis("RICOH.png")
         self.ricoh_btn.setObjectName("ricoh_btn")
@@ -227,25 +234,25 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
         self.gridLayout.addWidget(self.ricoh_btn, 0, 7, 1, 1)
 
         # Samsung
-        self.samsung_btn = QtWidgets.QPushButton(self.centralwidget)
-        self.samsung_btn.setMinimumSize(QtCore.QSize(0, 50))
-        self.samsung_btn.setStyleSheet(
-            "image: url(icons/SAMSUNG.png);" "background-color: #fff;" "color: white;" "border-style: outset;" "border-width: 2px;" \
+        self.samsung_btn = QtWidgets.QToolButton(self.centralwidget)
+        icon13 = QtGui.QIcon()
+        icon13.addPixmap(QtGui.QPixmap("icons/SAMSUNG.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.samsung_btn.setIcon(icon13)
+        self.samsung_btn.setIconSize(QtCore.QSize(120, 50))
+        self.samsung_btn.setStyleSheet("background-color: #fff;" "color: white;" "border-style: outset;" "border-width: 2px;" \
             "border-radius: 15px;" "border-color: black;" "padding: 2px;")
-
-        self.samsung_btn.setWhatsThis("SAMSUNG.png")
         self.samsung_btn.setObjectName("samsung_btn")
         self.samsung_btn.clicked.connect(lambda: self.show_spare_parts(Samsung))
         self.gridLayout.addWidget(self.samsung_btn, 0, 8, 1, 1)
 
         # Sharp
-        self.sharp_btn = QtWidgets.QPushButton(self.centralwidget)
-        self.sharp_btn.setMinimumSize(QtCore.QSize(0, 50))
-        self.sharp_btn.setStyleSheet(
-            "image: url(icons/SHARP.png);" "background-color: #fff;" "color: white;" "border-style: outset;" "border-width: 2px;" \
+        self.sharp_btn = QtWidgets.QToolButton(self.centralwidget)
+        icon14 = QtGui.QIcon()
+        icon14.addPixmap(QtGui.QPixmap("icons/SHARP.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.sharp_btn.setIcon(icon14)
+        self.sharp_btn.setIconSize(QtCore.QSize(120, 50))
+        self.sharp_btn.setStyleSheet("background-color: #fff;" "color: white;" "border-style: outset;" "border-width: 2px;" \
             "border-radius: 15px;" "border-color: black;" "padding: 2px;")
-
-        self.sharp_btn.setWhatsThis("SHARP.png")
         self.sharp_btn.setObjectName("sharp_btn")
         self.sharp_btn.clicked.connect(lambda: self.show_spare_parts(Sharp))
         self.gridLayout.addWidget(self.sharp_btn, 0, 9, 1, 1)
@@ -266,65 +273,66 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
         self.selected_table_label.setAlignment(QtCore.Qt.AlignCenter)
         self.selected_table_label.setObjectName("selected_table_label")
         self.selected_table_label.hide()
-        self.gridLayout.addWidget(self.selected_table_label, 3, 4, 1, 4)
+        self.gridLayout.addWidget(self.selected_table_label, 3, 3, 1, 5)
 
         """ ------------------------------- ΚΑΤΩ ΕΙΚΟΝΙΔΙΑ------------------------- """
 
         # Μελανάκια
         self.melanakia_btn = QtWidgets.QPushButton(self.centralwidget)
-        self.melanakia_btn.setMinimumSize(QtCore.QSize(0, 50))
-        self.melanakia_btn.setStyleSheet(
-            "image: url(icons/ΜΕΛΑΝΑΚΙΑ.png);" "background-color: #ffb907;" "color: white;" "border-style: outset;" "border-width: 2px;" \
+        icon11 = QtGui.QIcon()
+        icon11.addPixmap(QtGui.QPixmap("icons/ΜΕΛΑΝΑΚΙΑ.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.melanakia_btn.setIcon(icon11)
+        self.melanakia_btn.setIconSize(QtCore.QSize(120, 50))
+        self.melanakia_btn.setStyleSheet("background-color: #ffb907;" "color: white;" "border-style: outset;" "border-width: 2px;" \
             "border-radius: 15px;" "border-color: black;" "padding: 2px;")
-
-        self.melanakia_btn.setWhatsThis("ΜΕΛΑΝΑΚΙΑ.png")
         self.melanakia_btn.setObjectName("melanakia_btn")
         self.melanakia_btn.clicked.connect(lambda: self.show_consumables(Melanakia))
         self.gridLayout.addWidget(self.melanakia_btn, 2, 0, 1, 2)
 
         # Μεαλανοταινίες
         self.melanotainies_btn = QtWidgets.QPushButton(self.centralwidget)
-        self.melanotainies_btn.setMinimumSize(QtCore.QSize(0, 50))
-        self.melanotainies_btn.setStyleSheet(
-            "image: url(icons/ΜΕΛΑΝΟΤΑΙΝΙΕΣ.png);" "background-color: #ffb907;" "color: white;" "border-style: outset;" "border-width: 2px;" \
+        icon9 = QtGui.QIcon()
+        icon9.addPixmap(QtGui.QPixmap("icons/ΜΕΛΑΝΟΤΑΙΝΙΕΣ.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.melanotainies_btn.setIcon(icon9)
+        self.melanotainies_btn.setIconSize(QtCore.QSize(120, 50))
+        self.melanotainies_btn.setStyleSheet("background-color: #ffb907;" "color: white;" "border-style: outset;" "border-width: 2px;" \
             "border-radius: 15px;" "border-color: black;" "padding: 2px;")
-        self.melanotainies_btn.setWhatsThis("ΜΕΛΑΝΟΤΑΙΝΙΕΣ.png")
         self.melanotainies_btn.setObjectName("melanotainies_btn")
         self.melanotainies_btn.clicked.connect(lambda: self.show_melanotainies(Melanotainies))
         self.gridLayout.addWidget(self.melanotainies_btn, 2, 2, 1, 2)
 
         # Toner
         self.toner_btn = QtWidgets.QPushButton(self.centralwidget)
-        self.toner_btn.setMinimumSize(QtCore.QSize(0, 50))
-        self.toner_btn.setStyleSheet(
-            "image: url(icons/ΤΟΝΕΡ.png);" "background-color: #ffb907;" "color: white;" "border-style: outset;" "border-width: 2px;" \
+        icon10 = QtGui.QIcon()
+        icon10.addPixmap(QtGui.QPixmap("icons/ΤΟΝΕΡ.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.toner_btn.setIcon(icon10)
+        self.toner_btn.setIconSize(QtCore.QSize(120, 50))
+        self.toner_btn.setStyleSheet("background-color: #ffb907;" "color: white;" "border-style: outset;" "border-width: 2px;" \
             "border-radius: 15px;" "border-color: black;" "padding: 2px;")
-
-        self.toner_btn.setWhatsThis("ΤΟΝΕΡ.png")
         self.toner_btn.setObjectName("toner_btn")
         self.toner_btn.clicked.connect(lambda: self.show_consumables(Toner))
         self.gridLayout.addWidget(self.toner_btn, 2, 4, 1, 2)
 
         # Φωτοτυπικά
         self.copiers_btn = QtWidgets.QPushButton(self.centralwidget)
-        self.copiers_btn.setMinimumSize(QtCore.QSize(0, 50))
-        self.copiers_btn.setStyleSheet(
-            "image: url(icons/ΦΩΤΟΤΥΠΙΚΑ.png);" "background-color: #ffb907;" "color: white;" "border-style: outset;" "border-width: 2px;" \
+        icon12 = QtGui.QIcon()
+        icon12.addPixmap(QtGui.QPixmap("icons/ΦΩΤΟΤΥΠΙΚΑ.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.copiers_btn.setIcon(icon12)
+        self.copiers_btn.setIconSize(QtCore.QSize(120, 50))
+        self.copiers_btn.setStyleSheet("background-color: #ffb907;" "color: white;" "border-style: outset;" "border-width: 2px;" \
             "border-radius: 15px;" "border-color: black;" "padding: 2px;")
-
-        self.copiers_btn.setWhatsThis("ΦΩΤΟΤΥΠΙΚΑ.png")
         self.copiers_btn.setObjectName("copiers_btn")
         self.copiers_btn.clicked.connect(lambda: self.show_consumables(Copiers))
         self.gridLayout.addWidget(self.copiers_btn, 2, 6, 1, 2)
 
         # Παραγγελίες
         self.orders_btn = QtWidgets.QPushButton(self.centralwidget)
-        self.orders_btn.setMinimumSize(QtCore.QSize(0, 50))
-        self.orders_btn.setStyleSheet(
-            "image: url(icons/ΠΑΡΑΓΓΕΛΙΕΣ.png);" "background-color: #ffb907;" "color: white;" "border-style: outset;" "border-width: 2px;" \
+        icon15 = QtGui.QIcon()
+        icon15.addPixmap(QtGui.QPixmap("icons/ΠΑΡΑΓΓΕΛΙΕΣ.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.orders_btn.setIcon(icon15)
+        self.orders_btn.setIconSize(QtCore.QSize(120, 50))
+        self.orders_btn.setStyleSheet("background-color: #ffb907;" "color: white;" "border-style: outset;" "border-width: 2px;" \
             "border-radius: 15px;" "border-color: black;" "padding: 2px;")
-
-        self.orders_btn.setWhatsThis("ΠΑΡΑΓΓΕΛΙΕΣ.png")
         self.orders_btn.setObjectName("orders_btn")
         self.orders_btn.clicked.connect(lambda: self.show_orders(Orders))
         self.gridLayout.addWidget(self.orders_btn, 2, 8, 1, 2)
@@ -337,7 +345,7 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
                                             "border-radius: 15px;" "border-color: black;" "padding: 2px;")
         self.search_line_edit.returnPressed.connect(self.search)
         self.search_line_edit.hide()
-        self.gridLayout.addWidget(self.search_line_edit, 9, 0, 1, 2)
+        self.gridLayout.addWidget(self.search_line_edit, 9, 3, 1, 2)
 
         # Search btn
         self.search_btn = QtWidgets.QToolButton(self.centralwidget)
@@ -364,10 +372,10 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
         self.search_btn.setObjectName("search_btn")
         self.search_btn.hide()
         self.search_btn.clicked.connect(lambda: self.search())
-        self.gridLayout.addWidget(self.search_btn, 9, 2, 1, 5)
+        self.gridLayout.addWidget(self.search_btn, 9, 5, 1, 1)
 
         # Delete All Btn
-        self.del_all_btn = QtWidgets.QToolButton(self.centralwidget)
+        self.del_all_btn = QtWidgets.QPushButton(self.centralwidget)
         self.del_all_btn.setMinimumSize(QtCore.QSize(0, 50))
         self.del_all_btn.setStyleSheet(
             "background-color: rgb(255, 85, 127);""border-radius : 1; border : 1px solid black")
@@ -379,14 +387,14 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
         icon2.addPixmap(QtGui.QPixmap("icons/delete_all.png"))
         self.del_all_btn.setIcon(icon2)
         self.del_all_btn.setIconSize(QtCore.QSize(30, 50))
-        self.del_all_btn.setToolButtonStyle(QtCore.Qt.ToolButtonTextBesideIcon)
+        # self.del_all_btn.setToolButtonStyle(QtCore.Qt.ToolButtonTextBesideIcon)
         self.del_all_btn.setObjectName("del_all_btn")
         self.del_all_btn.hide()
         self.del_all_btn.clicked.connect(self.delete_orders)
         self.gridLayout.addWidget(self.del_all_btn, 9, 7, 1, 1)
 
         # Delete Selected btn
-        self.del_selected_btn = QtWidgets.QToolButton(self.centralwidget)
+        self.del_selected_btn = QtWidgets.QPushButton(self.centralwidget)
         self.del_selected_btn.setMinimumSize(QtCore.QSize(0, 50))
         self.del_selected_btn.setStyleSheet("background-color: gray;" "color: white;" "border-style: outset;"
                                             "border-width: 2px;" "border-radius: 15px;" "border-color: black;"
@@ -396,7 +404,7 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
         icon1.addPixmap(QtGui.QPixmap("icons/delete_selected.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.del_selected_btn.setIcon(icon1)
         self.del_selected_btn.setIconSize(QtCore.QSize(30, 50))
-        self.del_selected_btn.setToolButtonStyle(QtCore.Qt.ToolButtonTextBesideIcon)
+        # self.del_selected_btn.setToolButtonStyle(QtCore.Qt.ToolButtonTextBesideIcon)
         self.del_selected_btn.setObjectName("del_selected_btn")
         self.del_selected_btn.hide()
         self.del_selected_btn.clicked.connect(self.delete_selected_orders)
@@ -693,7 +701,7 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        self.del_selected_btn.setText(_translate("MainWindow", "   Διαγραφή\n   επιλεγμένων"))
+        self.del_selected_btn.setText(_translate("MainWindow", "Διαγραφή\nεπιλεγμέν"))
         self.selected_table_label.setText(_translate("MainWindow", "Επιλεγμένος Πίνακας"))
         self.del_all_btn.setText(_translate("MainWindow", "   Διαγραφή\n        όλων"))
         self.menu.setTitle(_translate("MainWindow", "Αρχείο"))
@@ -710,92 +718,109 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
 
     def search(self):
         text_to_search = self.search_line_edit.text()
-        if text_to_search == "" or text_to_search == " " or len(text_to_search) < 3:
+        if text_to_search == "" or text_to_search == " ":
             return
         self.search_line_edit.clear()
         self.treeWidget.clear()
+        if self.selected_table.__tablename__ == "ΜΕΛΑΝΑΚΙΑ" or self.selected_table.__tablename__ == "ΤΟΝΕΡ" \
+                or self.selected_table.__tablename__ == "ΦΩΤΟΤΥΠΙΚΑ" or self.selected_table.__tablename__ == "ΜΕΛΑΝΟΤΑΙΝΙΕΣ":
+            self.data_to_show = search_on_consumables(self.selected_table, text_to_search)
+        elif self.selected_table.__tablename__ == "ΧΧΧ":
+            self.data_to_show = search_on_orders(text_to_search)
+        else:
+            self.data_to_show = search_on_spare_parts(self.selected_table, text_to_search)
         for index, item in enumerate(self.data_to_show):
-            list_of_item = str(item).replace(" ", "")
-
-            if re.sub('[^A-Za-z0-9]+', '', text_to_search.lower()) in re.sub('[^A-Za-z0-9]+', '', str(item).lower()):
-                # ΠΑΡΑΓΓΕΛΙΕΣ
-                if self.selected_table_label.text() == "ΠΑΡΑΓΓΕΛΙΕΣ":
-                    self.qitem = QTreeWidgetItem(self.treeWidget,
-                                                 [str(item.ID), str(item.ΚΩΔΙΚΟΣ), item.ΗΜΕΡΟΜΗΝΙΑ,
-                                                  str(item.ΠΕΡΙΓΡΑΦΗ),
-                                                  str(item.ΑΠΟΤΕΛΕΣΜΑ), item.ΠΑΡΑΤΗΡΗΣΕΙΣ])
-                    self.treeWidget.addTopLevelItem(self.qitem)
-                    self.treeWidget.setColumnWidth(3, 500)
-                    self.treeWidget.resizeColumnToContents(index)
-                    # Για να μήν ψάχνει το ιδιο string στα επομενα πεδια του ιδου προιόντος
-                    # πχ αν βρει την λεξει "brother" στο πεδιο ΠΕΡΙΓΡΑΦΗ αν το αφήσουμε να ψαξει και στις
-                    # ΠΑΡΑΤΗΡΗΣΕΙΣ θα μας βγαλει δυο φορές το ιδιο προιόν στο treeWidget
-                    # για αυτο κανουμε break το εσωτρεικό loop
-                    # break
-                    # ΜΕΛΑΝΑΚΙΑ + ΤΟΝΕΡ
-                elif self.selected_table_label.text() == "ΜΕΛΑΝΑΚΙΑ" or self.selected_table_label.text() == "ΤΟΝΕΡ" \
-                        or self.selected_table_label.text() == "ΦΩΤΟΤΥΠΙΚΑ":
-                    self.qitem = QTreeWidgetItem(self.treeWidget,
-                                                 [str(item.ID), str(item.ΕΤΑΙΡΕΙΑ), item.ΠΟΙΟΤΗΤΑ,
-                                                  str(item.ΑΝΑΛΩΣΙΜΟ),
-                                                  str(item.ΠΕΡΙΓΡΑΦΗ), item.ΚΩΔΙΚΟΣ, item.ΤΕΜΑΧΙΑ, item.ΤΙΜΗ,
-                                                  item.ΣΥΝΟΛΟ,
-                                                  item.ΣΕΛΙΔΕΣ, item.ΠΕΛΑΤΕΣ, item.ΠΑΡΑΤΗΡΗΣΗΣ])
+            if self.selected_table.__tablename__ == "ΜΕΛΑΝΑΚΙΑ" or self.selected_table.__tablename__ == "ΤΟΝΕΡ" \
+                    or self.selected_table.__tablename__ == "ΦΩΤΟΤΥΠΙΚΑ":
+                self.qitem = TreeWidgetItem(self.treeWidget,
+                                                       [str(item.ID), str(item.ΕΤΑΙΡΕΙΑ), item.ΠΟΙΟΤΗΤΑ,
+                                                        str(item.ΑΝΑΛΩΣΙΜΟ),
+                                                        str(item.ΠΕΡΙΓΡΑΦΗ), item.ΚΩΔΙΚΟΣ, item.ΤΕΜΑΧΙΑ, item.ΤΙΜΗ,
+                                                        item.ΣΥΝΟΛΟ,
+                                                        item.ΣΕΛΙΔΕΣ, item.ΠΕΛΑΤΕΣ, item.ΠΑΡΑΤΗΡΗΣΗΣ])
+                if "C/M/Y" in item.ΠΕΡΙΓΡΑΦΗ:
+                    self.qitem.setBackground(4, QtGui.QColor('green'))
+                    self.qitem.setForeground(4, QtGui.QColor('white'))
+                elif "CYAN" in item.ΠΕΡΙΓΡΑΦΗ:
+                    self.qitem.setBackground(4, QtGui.QColor('#0517D2'))
+                    self.qitem.setForeground(4, QtGui.QColor('white'))
+                elif "MAGENTA" in item.ΠΕΡΙΓΡΑΦΗ:
+                    self.qitem.setBackground(4, QtGui.QColor('#D205CF'))
+                    self.qitem.setForeground(4, QtGui.QColor('white'))
+                elif "YELLOW" in item.ΠΕΡΙΓΡΑΦΗ:
+                    self.qitem.setBackground(4, QtGui.QColor('yellow'))
+                    self.qitem.setForeground(4, QtGui.QColor('black'))
+                elif "GRAY" in item.ΠΕΡΙΓΡΑΦΗ:
+                    self.qitem.setBackground(4, QtGui.QColor("gray"))
+                    self.qitem.setForeground(4, QtGui.QColor('white'))
+                elif "BLACK" in item.ΠΕΡΙΓΡΑΦΗ:
+                    self.qitem.setBackground(4, QtGui.QColor("black"))
+                    self.qitem.setForeground(4, QtGui.QColor('white'))
+                self.treeWidget.addTopLevelItem(self.qitem)
+                self.treeWidget.setColumnWidth(4, 500)
+                self.treeWidget.resizeColumnToContents(index)
+                # Για να μήν ψάχνει το ιδιο string στα επομενα πεδια του ιδου προιόντος
+                # πχ αν βρει την λεξει "brother" στο πεδιο ΠΕΡΙΓΡΑΦΗ αν το αφήσουμε να ψαξει και στις
+                # ΠΑΡΑΤΗΡΗΣΕΙΣ θα μας βγαλει δυο φορές το ιδιο προιόν στο treeWidget
+                # για αυτο κανουμε break το εσωτρεικό loop
+                # break
+                # ΜΕΛΑΝΟΤΑΙΝΙΕΣ
+            elif self.selected_table.__tablename__ == "ΜΕΛΑΝΟΤΑΙΝΙΕΣ":
+                self.qitem = TreeWidgetItem(self.treeWidget,
+                                                       [str(item.ID), str(item.ΕΤΑΙΡΕΙΑ), item.ΠΟΙΟΤΗΤΑ,
+                                                        str(item.ΑΝΑΛΩΣΙΜΟ),
+                                                        str(item.ΠΕΡΙΓΡΑΦΗ), item.ΚΩΔΙΚΟΣ, item.ΤΕΜΑΧΙΑ, item.ΤΙΜΗ,
+                                                        item.ΣΥΝΟΛΟ,
+                                                        item.ΠΕΛΑΤΕΣ, item.ΠΑΡΑΤΗΡΗΣΗΣ])
+                self.treeWidget.addTopLevelItem(self.qitem)
+                self.treeWidget.setColumnWidth(4, 500)
+                self.treeWidget.resizeColumnToContents(index)
+                # Για να μήν ψάχνει το ιδιο string στα επομενα πεδια του ιδου προιόντος
+                # πχ αν βρει την λεξει "brother" στο πεδιο ΠΕΡΙΓΡΑΦΗ αν το αφήσουμε να ψαξει και στις
+                # ΠΑΡΑΤΗΡΗΣΕΙΣ θα μας βγαλει δυο φορές το ιδιο προιόν στο treeWidget
+                # για αυτο κανουμε break το εσωτρεικό loop
+                # break
+            elif self.selected_table.__tablename__ == "XXX":
+                for index, item in enumerate(self.data_to_show):
+                    self.qitem = TreeWidgetItem(self.treeWidget,
+                                                [str(item.ID), str(item.ΚΩΔΙΚΟΣ), item.ΗΜΕΡΟΜΗΝΙΑ, str(item.ΠΕΡΙΓΡΑΦΗ),
+                                                 str(item.ΑΠΟΤΕΛΕΣΜΑ), item.ΠΑΡΑΤΗΡΗΣΕΙΣ])
                     if "C/M/Y" in item.ΠΕΡΙΓΡΑΦΗ:
-                        self.qitem.setBackground(4, QtGui.QColor('green'))
-                        self.qitem.setForeground(4, QtGui.QColor('white'))
+                        self.qitem.setBackground(3, QtGui.QColor('green'))
+                        self.qitem.setForeground(3, QtGui.QColor('white'))
                     elif "CYAN" in item.ΠΕΡΙΓΡΑΦΗ:
-                        self.qitem.setBackground(4, QtGui.QColor('#0517D2'))
-                        self.qitem.setForeground(4, QtGui.QColor('white'))
+                        self.qitem.setBackground(3, QtGui.QColor('#0517D2'))
+                        self.qitem.setForeground(3, QtGui.QColor('white'))
                     elif "MAGENTA" in item.ΠΕΡΙΓΡΑΦΗ:
-                        self.qitem.setBackground(4, QtGui.QColor('#D205CF'))
-                        self.qitem.setForeground(4, QtGui.QColor('white'))
+                        self.qitem.setBackground(3, QtGui.QColor('#D205CF'))
+                        self.qitem.setForeground(3, QtGui.QColor('white'))
                     elif "YELLOW" in item.ΠΕΡΙΓΡΑΦΗ:
-                        self.qitem.setBackground(4, QtGui.QColor('yellow'))
-                        self.qitem.setForeground(4, QtGui.QColor('black'))
+                        self.qitem.setBackground(3, QtGui.QColor('yellow'))
+                        self.qitem.setForeground(3, QtGui.QColor('black'))
                     elif "GRAY" in item.ΠΕΡΙΓΡΑΦΗ:
-                        self.qitem.setBackground(4, QtGui.QColor("gray"))
-                        self.qitem.setForeground(4, QtGui.QColor('white'))
+                        self.qitem.setBackground(3, QtGui.QColor("gray"))
+                        self.qitem.setForeground(3, QtGui.QColor('white'))
                     elif "BLACK" in item.ΠΕΡΙΓΡΑΦΗ:
-                        self.qitem.setBackground(4, QtGui.QColor("black"))
-                        self.qitem.setForeground(4, QtGui.QColor('white'))
+                        self.qitem.setBackground(3, QtGui.QColor("black"))
+                        self.qitem.setForeground(3, QtGui.QColor('white'))
+                    self.qitem.setTextAlignment(4, QtCore.Qt.AlignCenter)
+                    self.treeWidget.setStyleSheet("QTreeView::item { padding: 10px }")
                     self.treeWidget.addTopLevelItem(self.qitem)
-                    self.treeWidget.setColumnWidth(4, 500)
-                    self.treeWidget.resizeColumnToContents(index)
-                    # Για να μήν ψάχνει το ιδιο string στα επομενα πεδια του ιδου προιόντος
-                    # πχ αν βρει την λεξει "brother" στο πεδιο ΠΕΡΙΓΡΑΦΗ αν το αφήσουμε να ψαξει και στις
-                    # ΠΑΡΑΤΗΡΗΣΕΙΣ θα μας βγαλει δυο φορές το ιδιο προιόν στο treeWidget
-                    # για αυτο κανουμε break το εσωτρεικό loop
-                    # break
-                    # ΜΕΛΑΝΟΤΑΙΝΙΕΣ
-                elif self.selected_table_label.text() == "ΜΕΛΑΝΟΤΑΙΝΙΕΣ":
-                    self.qitem = QTreeWidgetItem(self.treeWidget,
-                                                 [str(item.ID), str(item.ΕΤΑΙΡΕΙΑ), item.ΠΟΙΟΤΗΤΑ,
-                                                  str(item.ΑΝΑΛΩΣΙΜΟ),
-                                                  str(item.ΠΕΡΙΓΡΑΦΗ), item.ΚΩΔΙΚΟΣ, item.ΤΕΜΑΧΙΑ, item.ΤΙΜΗ,
-                                                  item.ΣΥΝΟΛΟ,
-                                                  item.ΠΕΛΑΤΕΣ, item.ΠΑΡΑΤΗΡΗΣΗΣ])
-                    self.treeWidget.addTopLevelItem(self.qitem)
-                    self.treeWidget.setColumnWidth(4, 500)
-                    self.treeWidget.resizeColumnToContents(index)
-                    # Για να μήν ψάχνει το ιδιο string στα επομενα πεδια του ιδου προιόντος
-                    # πχ αν βρει την λεξει "brother" στο πεδιο ΠΕΡΙΓΡΑΦΗ αν το αφήσουμε να ψαξει και στις
-                    # ΠΑΡΑΤΗΡΗΣΕΙΣ θα μας βγαλει δυο φορές το ιδιο προιόν στο treeWidget
-                    # για αυτο κανουμε break το εσωτρεικό loop
-                    # break
-                else:
-                    self.qitem = QTreeWidgetItem(self.treeWidget,
-                                                 [str(item.ID), str(item.PARTS_NR), item.ΠΕΡΙΓΡΑΦΗ,
-                                                  str(item.ΚΩΔΙΚΟΣ),
-                                                  str(item.ΤΕΜΑΧΙΑ), item.ΠΑΡΑΤΗΡΗΣΗΣ])
-                    self.treeWidget.addTopLevelItem(self.qitem)
-                    self.treeWidget.setColumnWidth(2, 500)
-                    self.treeWidget.resizeColumnToContents(index)
-                    # Για να μήν ψάχνει το ιδιο string στα επομενα πεδια του ιδου προιόντος
-                    # πχ αν βρει την λεξει "brother" στο πεδιο ΠΕΡΙΓΡΑΦΗ αν το αφήσουμε να ψαξει και στις
-                    # ΠΑΡΑΤΗΡΗΣΕΙΣ θα μας βγαλει δυο φορές το ιδιο προιόν στο treeWidget
-                    # για αυτο κανουμε break το εσωτρεικό loop
-                    # break
+                self.treeWidget.setColumnWidth(3, 500)
+                # self.treeWidget.itemDoubleClicked.connect(self.show_edit_orders_window)
+            else:
+                self.qitem = TreeWidgetItem(self.treeWidget,
+                                                       [str(item.ID), str(item.PARTS_NR), item.ΠΕΡΙΓΡΑΦΗ,
+                                                        str(item.ΚΩΔΙΚΟΣ),
+                                                        str(item.ΤΕΜΑΧΙΑ), item.ΠΑΡΑΤΗΡΗΣΗΣ])
+                self.treeWidget.addTopLevelItem(self.qitem)
+                self.treeWidget.setColumnWidth(2, 500)
+                self.treeWidget.resizeColumnToContents(index)
+                # Για να μήν ψάχνει το ιδιο string στα επομενα πεδια του ιδου προιόντος
+                # πχ αν βρει την λεξει "brother" στο πεδιο ΠΕΡΙΓΡΑΦΗ αν το αφήσουμε να ψαξει και στις
+                # ΠΑΡΑΤΗΡΗΣΕΙΣ θα μας βγαλει δυο φορές το ιδιο προιόν στο treeWidget
+                # για αυτο κανουμε break το εσωτρεικό loop
+                # break
 
     def show_edit_spare_part_window(self, item, column):  # column ειναι η στήλη που πατησε κλικ
         item_id = item.text(0)  # item.text(0)  == ID
@@ -1058,9 +1083,12 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
         down_btn = [self.melanakia_btn, self.melanotainies_btn, self.toner_btn, self.copiers_btn, self.orders_btn]
         all_btn = up_btn + down_btn
 
+        # pressed_btn.setStyleSheet(
+        #     f"image: url(icons/{self.selected_table_label.text()}.png);" "background-color: #aaff7f;" "color: white;" "border-style: outset;" "border-width: 2px;" \
+        #     "border-radius: 15px;" "border-color: black;" "padding: 4px;")
         pressed_btn.setStyleSheet(
-            f"image: url(icons/{self.selected_table_label.text()}.png);" "background-color: #aaff7f;" "color: white;" "border-style: outset;" "border-width: 2px;" \
-            "border-radius: 15px;" "border-color: black;" "padding: 4px;")
+            f"background-color: #50f333;" "color: white;"
+            "border-style: outset;" "border-width: 2px;" "border-radius: 15px;" "border-color: black;" "padding: 4px;")
 
         # self.selected_table_label.setStyleSheet(f"image: url(icons/{self.selected_table_label.text()}.png);"
         # "background-color: #aaff7f;" "color: white;" "border-style: outset;" "border-width: 2px;" \ "border-radius:
@@ -1068,13 +1096,21 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
         for btn in all_btn:
             if btn in up_btn and btn != pressed_btn:
 
+                # btn.setStyleSheet(
+                #     f"image: url(icons/{btn.whatsThis()});" "background-color: #fff;" "color: white;" "border-style: outset;" "border-width: 2px;" \
+                #     "border-radius: 15px;" "border-color: black;" "padding: 4px;")
                 btn.setStyleSheet(
-                    f"image: url(icons/{btn.whatsThis()});" "background-color: #fff;" "color: white;" "border-style: outset;" "border-width: 2px;" \
-                    "border-radius: 15px;" "border-color: black;" "padding: 4px;")
+                    f"background-color: #fff;" "color: white;"
+                    "border-style: outset;" "border-width: 2px;" "border-radius: 15px;" "border-color: black;"
+                    "padding: 4px;")
             elif btn in down_btn and btn != pressed_btn:
+                # btn.setStyleSheet(
+                #     f"image: url(icons/{btn.whatsThis()});" "background-color: #ffb907;" "color: white;" "border-style: outset;" "border-width: 2px;" \
+                #     "border-radius: 15px;" "border-color: black;" "padding: 4px;")
                 btn.setStyleSheet(
-                    f"image: url(icons/{btn.whatsThis()});" "background-color: #ffb907;" "color: white;" "border-style: outset;" "border-width: 2px;" \
-                    "border-radius: 15px;" "border-color: black;" "padding: 4px;")
+                    f"background-color: #ffb907;" "color: white;"
+                    "border-style: outset;" "border-width: 2px;" "border-radius: 15px;" "border-color: black;"
+                    "padding: 4px;")
 
     def add_spare_part(self):
         if self.selected_table is None:

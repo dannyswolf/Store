@@ -10,6 +10,8 @@ import subprocess
 import os
 import shutil
 import pathlib  # Για αποθήκευση αρχείου να πάρουμε μόνο την κατάληξει .svg.png
+import time
+
 import sqlalchemy
 from sqlalchemy.sql import exists
 import traceback
@@ -293,10 +295,9 @@ class Ui_edit_orders_window(QMainWindow):  # Πρέπει να κληρονομ�
                 # Μετατροπή των directories αναλογα με το λειτουργεικό συστημα
                 if sys.platform == "win32":
                     self.images_path = self.images_path.replace("/", "\\")
-                elif sys.platform == "linux":
-                    self.images_path = self.images_path.replace("\\", "/")
                 if os.path.exists(self.images_path):
                     self.files = os.listdir(self.images_path)
+                    return
         except Exception:
             traceback.print_exc()
             QMessageBox.critical(None, "Σφάλμα", f"Κάτι δεν πήγε καλα!")
