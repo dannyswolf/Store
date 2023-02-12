@@ -14,6 +14,7 @@
 # για να ανοιξουμε πολλά παράθυρα βαζουμε  # self.edit_spare_part.window = self.edit_spare_part_window
 # ετσι  δημουργούμε κάθε φορά νεο παράθυρο
 ##############################################################################################
+# Version = 1.1.1 Add splitter and bold labels
 # Version = 1.0.9 Search with sqlalchemy
 # Version = 1.0.8 Fix closed windows with X
 # Version = 1.0.7 Check for double part no + κωδικούς and search with re.sub()
@@ -64,8 +65,8 @@ import re
 
 # --------------Log Files----------------------
 # log_format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-sys.stderr.write = root_logger.error
-sys.stdout.write = root_logger.info
+# sys.stderr.write = root_logger.error
+# sys.stdout.write = root_logger.info
 
 
 # Κανουμε sub class το QTreeWidgetItem για να κανει sort τους αριθμους που ειναι σε string μορφη
@@ -125,7 +126,7 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
 
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1117, 662)
+        MainWindow.resize(1200, 800)
         MainWindow.setMinimumSize(QtCore.QSize(0, 30))
         MainWindow.setWindowTitle(f"Αποθήκη {VERSION}")
         MainWindow.setWindowIcon(QtGui.QIcon('icons/icon.png'))
@@ -693,7 +694,7 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
             elif "BLACK" in item.ΠΕΡΙΓΡΑΦΗ:
                 self.qitem.setBackground(3, QtGui.QColor("black"))
                 self.qitem.setForeground(3, QtGui.QColor('white'))
-            self.qitem.setTextAlignment(4, QtCore.Qt.AlignCenter)
+            self.qitem.setTextAlignment(4, QtCore.Qt.AlignmentFlag.AlignCenter)
             self.treeWidget.setStyleSheet("QTreeView::item { padding: 10px }")
             self.treeWidget.addTopLevelItem(self.qitem)
         self.treeWidget.setColumnWidth(3, 500)
@@ -701,17 +702,17 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        self.del_selected_btn.setText(_translate("MainWindow", "Διαγραφή\nεπιλεγμέν"))
+        self.del_selected_btn.setText(_translate("MainWindow", "Διαγραφή\nεπιλεγμένων"))
         self.selected_table_label.setText(_translate("MainWindow", "Επιλεγμένος Πίνακας"))
         self.del_all_btn.setText(_translate("MainWindow", "   Διαγραφή\n        όλων"))
         self.menu.setTitle(_translate("MainWindow", "Αρχείο"))
         self.menuBackup.setTitle(_translate("MainWindow", "Backup"))
         self.menuInfo.setTitle(_translate("MainWindow", "Info"))
-        # self.action.setText(_translate("MainWindow", "Ανοιγμα αρχείου"))
+        # self.action.setText(_translate("MainWindow", "Άνοιγμα αρχείου"))
         self.action_F1.setText(_translate("MainWindow", "Προσθήκη  F1"))
         self.actionEdit.setText(_translate("MainWindow", "Επεξεργασία  F3"))
         self.action_3.setText(_translate("MainWindow", "Διαγραφή"))
-        self.action_Esc.setText(_translate("MainWindow", "Εξοδος  Esc"))
+        self.action_Esc.setText(_translate("MainWindow", "Έξοδος  Esc"))
         self.actionBackup_Database.setText(_translate("MainWindow", "Backup Database"))
         self.action_Excel.setText(_translate("MainWindow", "Εξαγωγή Excel"))
         self.action_4.setText(_translate("MainWindow", "Πληροφορίες"))
@@ -875,21 +876,21 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
         if self.edit_consumables_window is None or not self.edit_consumables_window.isVisible():
             self.edit_consumables_window = QWidget()
             self.edit_consumables_window.setWindowTitle(f"Επεξεργασία πρώτου αναλώσιμου")
-            self.edit_consumables_window.setStyleSheet(u"font: 75 13pt \"Calibri\";")
+            # self.edit_consumables_window.setStyleSheet(u"font: 75 13pt \"Calibri\";") # το παίρνει απο το edit_consumables_window
             self.edit_consumable = Ui_edit_consumables_window()
-            # Αρχικοποιηση των κουμπιων, γραμμων επεξεργασίας κτλπ
+            # Αρχικοποίηση των κουμπιών, γραμμών επεξεργασίας κτλ π
             self.edit_consumable.setupUi(self.edit_consumables_window)
             self.edit_consumable.selected_id = item_id
             self.edit_consumable.selected_table = self.selected_table
-            self.edit_consumable.edit_consumable()  # Εμφάνηση δεδομένων απο την βάση δεδομένων
-            self.edit_consumable.show_file()  # Εμφάνηση Αρχείων
-            self.edit_consumable.window = self.edit_consumables_window  # Αν θέλουμε να ανοιγουν πολλα παράθυρα
+            self.edit_consumable.edit_consumable()  # Εμφάνιση δεδομένων απο τη βάση δεδομένων
+            self.edit_consumable.show_file()  # Εμφάνιση Αρχείων
+            self.edit_consumable.window = self.edit_consumables_window  # Αν θέλουμε να ανοίγουν πολλά παράθυρα
             self.edit_consumables_window.show()
             self.edit_consumable.window_closed.connect(self.refresh_consumables)
         elif self.second_edit_consumables_window is None or not self.second_edit_consumables_window.isVisible():
             self.second_edit_consumables_window = QWidget()
             self.second_edit_consumables_window.setWindowTitle(f"Επεξεργασία δεύτερου αναλώσιμου")
-            self.second_edit_consumables_window.setStyleSheet(u"font: 75 13pt \"Calibri\";")
+            # self.second_edit_consumables_window.setStyleSheet(u"font: 75 13pt \"Calibri\";")
             self.second_edit_consumable = Ui_edit_consumables_window()
             # Αρχικοποιηση των κουμπιων, γραμμων επεξεργασίας κτλπ
             self.second_edit_consumable.setupUi(self.second_edit_consumables_window)
@@ -903,7 +904,7 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
         elif self.third_edit_consumables_window is None or not self.third_edit_consumables_window.isVisible():
             self.third_edit_consumables_window = QWidget()
             self.third_edit_consumables_window.setWindowTitle(f"Επεξεργασία τρίτου αναλώσιμου")
-            self.third_edit_consumables_window.setStyleSheet(u"font: 75 13pt \"Calibri\";")
+            # self.third_edit_consumables_window.setStyleSheet(u"font: 75 13pt \"Calibri\";")
             self.third_edit_consumable = Ui_edit_consumables_window()
             # Αρχικοποιηση των κουμπιων, γραμμων επεξεργασίας κτλπ
             self.third_edit_consumable.setupUi(self.third_edit_consumables_window)
@@ -944,7 +945,7 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
         if self.edit_melanotainies_window is None or not self.edit_melanotainies_window.isVisible():
             self.edit_melanotainies_window = QWidget()
             self.edit_melanotainies_window.setWindowTitle("Επεξεργασία πρώτης μελανοταινίας")
-            self.edit_melanotainies_window.setStyleSheet(u"font: 75 13pt \"Calibri\";")
+            # self.edit_melanotainies_window.setStyleSheet(u"font: 75 13pt \"Calibri\";")
             self.edit_melanotainia = Ui_edit_melanotainies_window()
             self.edit_melanotainia.setupUi(
                 self.edit_melanotainies_window)  # Αρχικοποιηση των κουμπιων, γραμμων επεξεργασίας κτλπ
@@ -1144,7 +1145,7 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
             else:
                 self.new_consumables_window = QWidget()
                 self.new_consumables_window.setWindowTitle(f"Προσθήκη {self.selected_table_label.text()}")
-                self.new_consumables_window.setStyleSheet(u"font: 75 13pt \"Calibri\";")
+                # self.new_consumables_window.setStyleSheet(u"font: 75 13pt \"Calibri\";")
                 self.new_consumable = Ui_edit_consumables_window()
                 self.new_consumable.setupUi(self.new_consumables_window)  # Αρχικοποιηση των κουμπιων, γραμμων επεξεργασίας κτλπ
                 self.new_consumable.selected_table = self.selected_table
