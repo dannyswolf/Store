@@ -8,7 +8,7 @@ today = datetime.today().strftime('%d/%m/%Y')
 today_str = today.replace("/", "-")
 now = datetime.now()
 now_str = now.strftime("%H-%M-%S")
-VERSION = "V 1.1.0"
+VERSION = "V 1.1.3"
 log_dir = "logs" + "/" + today.replace("/", "_") + "/"
 BASE_PATH = "\\\\192.168.1.200\\Public\\GOOGLE-DRIVE\\ΕΓΓΡΑΦΑ"
 if not os.path.exists(log_dir):
@@ -26,7 +26,7 @@ else:  # VPN
 
 # DB = "3. ΚΑΙΝΟΥΡΙΑ_ΑΠΟΘΗΚΗ.db"
 BASE_DIR = os.path.dirname(os.path.abspath(DB))
-print("BASE_DIR", BASE_DIR)
+# print("BASE_DIR", BASE_DIR)
 SPARE_PARTS_ROOT = os.path.join(BASE_DIR, "SpareParts_images/")
 
 log_file_name = f"{today_str}.log"

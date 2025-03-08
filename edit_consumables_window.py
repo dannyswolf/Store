@@ -337,11 +337,11 @@ class Ui_edit_consumables_window(QtWidgets.QMainWindow):   # Πρέπει να �
         self.description_label.setText(_translate("edit_consumables_window", "Περιγραφή"))
         self.cosumable_label.setText(_translate("edit_consumables_window", "Αναλώσιμο"))
         self.price_label.setText(_translate("edit_consumables_window", "Τιμή"))
-        self.previous_btn.setText(_translate("edit_consumables_window", "Προηγούμενη"))
+        self.previous_btn.setText(_translate("edit_consumables_window", "Προηγούμενο"))
         self.comments_label.setText(_translate("edit_consumables_window", "Παρατηρήσεις"))
         self.orders_btn.setText(_translate("edit_consumables_window", "Προσθήκη στις παραγγελίες"))
         self.delete_file_btn.setText(_translate("edit_consumables_window", "Διαγραφή αρχείου"))
-        self.next_btn.setText(_translate("edit_consumables_window", "Επόμενη"))
+        self.next_btn.setText(_translate("edit_consumables_window", "Επόμενο"))
         self.save_btn.setText(_translate("edit_consumables_window", "Αποθήκευση"))
         self.open_pdf_file_btn.setText(_translate("edit_consumables_window", "Άνοιγμα αρχείου pdf"))
         # self.delete_spare_part_btn.setText(_translate("edit_consumables_window", "Διαγραφή προϊόντος"))
@@ -563,7 +563,7 @@ class Ui_edit_consumables_window(QtWidgets.QMainWindow):   # Πρέπει να �
         # Ελεγχος αν έχει κωδικό
         if self.code_lineEdit.text() == "" or self.code_lineEdit.text() is None:
             QtWidgets.QMessageBox.warning(None, "Προσοχή", "Το πεδίο κωδικός δεν μπορεί να είναι κενό."
-                                                           "\nΠαρακαλώ ορίστε κωδικό για το προιόν!")
+                                                           "\nΠαρακαλώ ορίστε κωδικό για το προϊόν!")
             return
         try:
             # set data to object
@@ -630,8 +630,8 @@ class Ui_edit_consumables_window(QtWidgets.QMainWindow):   # Πρέπει να �
     def send_to_orders(self):
         try:
             if not session.query(exists().where(Orders.ΚΩΔΙΚΟΣ == self.item.ΚΩΔΙΚΟΣ)).scalar():
-                new_order = Orders(ΚΩΔΙΚΟΣ=self.item.ΚΩΔΙΚΟΣ, ΗΜΕΡΟΜΗΝΙΑ=today, ΠΕΡΙΓΡΑΦΗ=self.item.ΠΕΡΙΓΡΑΦΗ,
-                                   ΑΠΟΤΕΛΕΣΜΑ="", images=self.images_path)
+                new_order = Orders(ΚΩΔΙΚΟΣ=self.item.ΚΩΔΙΚΟΣ, ΠΟΙΟΤΗΤΑ=self.item.ΠΟΙΟΤΗΤΑ, ΗΜΕΡΟΜΗΝΙΑ=today,
+                                   ΠΕΡΙΓΡΑΦΗ=self.item.ΠΕΡΙΓΡΑΦΗ, ΑΠΟΤΕΛΕΣΜΑ="", images=self.images_path)
                 session.add(new_order)
                 session.commit()
                 QtWidgets.QMessageBox.information(None, "Αποθήκευση", f"Ο κωδικός {self.item.ΚΩΔΙΚΟΣ} \nμπήκε για παραγγελία!")
@@ -642,13 +642,13 @@ class Ui_edit_consumables_window(QtWidgets.QMainWindow):   # Πρέπει να �
 
         except sqlalchemy.exc.OperationalError:
             QtWidgets.QMessageBox.critical(None, "Σφάλμα",
-                                 f"Ο πίνακας: {self.selected_table} δεν βρέθηκε!\nΕλέξτε την βάση δεδομένων\n"
-                                 f"Οι αλλαγές δεν αποθήκευτηκαν!")
+                                 f"Ο πίνακας: {self.selected_table} δεν βρέθηκε!\nΕλέγξτε την βάση δεδομένων\n"
+                                 f"Οι αλλαγές δεν αποθηκευτήκαν!")
             return
 
-        except Exception:
+        except Exception as error:
             traceback.print_exc()
-            QtWidgets.QMessageBox.critical(None, "Σφάλμα", f"Κάτι δεν πήγε καλα!\nΟι αλλαγές δεν αποθήκευτηκαν!")
+            QtWidgets.QMessageBox.critical(None, "Σφάλμα", f"Κάτι δεν πήγε καλα!\nΟι αλλαγές δεν αποθήκευτηκαν!\n{error}")
             return
 
     def hide_buttons(self):

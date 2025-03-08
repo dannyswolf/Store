@@ -4,16 +4,18 @@
 #
 # Created by: PyQt5 UI code generator 5.15.4
 # ###############################------------------NOTES--------------------###################
-# Αν ο χρήστης κλεισει τα παράθυρα απο το Χ πανω δεξια το self.edit_spare_parts_windows δεν γινεται None
-# για αυτο βάζουμε αν είναι ορατο -->  self.edit_spare_part_window.isVisible()
-# στα ανταλλακτικα (spare_parts) μπορουμε να ανοιξουμε μόνο δυο παράθυρα ταυτόχρονα + 1 για εισαγώγή νέου
-# στα αναλώσιμα (consumables) μπορουμε να ανοιξουμε μόνο τρια παράθυρα ταυτόχρονα + 1 για εισαγώγή νέου
-# στις παραγγελίες (orders) μπορουμε να ανοιξουμε μόνο δυο παράθυρα ταυτόχρονα + 1 για εισαγώγή νέου
-# στις μελανοταινίες (melanotainies) μπορουμε να ανοιξουμε μόνο δυο παράθυρα ταυτόχρονα + 1 για εισαγώγή νέου
+# Αν ο χρήστης κλείσει τα παράθυρα απο το Χ πάνω δεξιά το self.edit_spare_parts_windows δεν γίνεται None
+# για αυτό βάζουμε αν είναι ορατό -->  self.edit_spare_part_window.isVisible()
+# στα ανταλλακτικά (spare_parts) μπορούμε να ανοίξουμε μόνο δυο παράθυρα ταυτόχρονα + 1 για εισαγωγή νέου
+# στα αναλώσιμα (consumables) μπορούμε να ανοίξουμε μόνο τρία παράθυρα ταυτόχρονα + 1 για εισαγωγή νέου
+# στις παραγγελίες (orders) μπορούμε να ανοίξουμε μόνο δυο παράθυρα ταυτόχρονα + 1 για εισαγωγή νέου
+# στις μελανοταινίες (melancholies) μπορούμε να ανοίξουμε μόνο δυο παράθυρα ταυτόχρονα + 1 για εισαγωγή νέου
 # για να μήν μπερδευόμαστε
-# για να ανοιξουμε πολλά παράθυρα βαζουμε  # self.edit_spare_part.window = self.edit_spare_part_window
-# ετσι  δημουργούμε κάθε φορά νεο παράθυρο
+# για να ανοίξουμε πολλά παράθυρα βάζουμε  # self.edit_spare_part.window = self.edit_spare_part_window
+# έτσι  δημιουργούμε κάθε φορά νεο παράθυρο
 ##############################################################################################
+# Version = 1.1.3 Fix Images to Orders   8-3-2025
+# Version = 1.1.2 Add quality to orders
 # Version = 1.1.1 Add splitter and bold labels
 # Version = 1.0.9 Search with sqlalchemy
 # Version = 1.0.8 Fix closed windows with X
@@ -34,7 +36,7 @@ import time
 from db import get_spare_parts, DB, select, conn, Orders, search_on_spare_parts, search_on_consumables, search_on_orders
 
 # Settings
-from settings import VERSION, today, root_logger
+from settings import VERSION, today, root_logger, BASE_PATH
 
 # PyQt5
 from PyQt5 import QtCore, QtGui, QtWidgets
@@ -64,6 +66,7 @@ from edit_malanotainies_window import Ui_edit_melanotainies_window
 import re
 
 # --------------Log Files----------------------
+import traceback
 # log_format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 # sys.stderr.write = root_logger.error
 # sys.stdout.write = root_logger.info
@@ -87,6 +90,9 @@ class TreeWidgetItem(QTreeWidgetItem):
 class Ui_MainWindow(QtWidgets.QMainWindow):
     def __init__(self, *args, **kwargs):
         super(Ui_MainWindow, self).__init__(*args, **kwargs)
+
+        self.images_path = None
+
         self.selected_table = None
         self.data_to_show = None
 
@@ -667,15 +673,14 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
         self.treeWidget.setStyleSheet(u"background-color: rgb(255, 255, 255);")
         self.treeWidget.setSizeAdjustPolicy(QAbstractScrollArea.AdjustToContents)
         self.treeWidget.setAlternatingRowColors(True)
-        self.treeWidget.setHeaderLabels(["ID", "Κωδικός", "Ημερομηνία", "Περιγραφή", "Αποτέλεσμα", "Παρατηρήσεις"])
+        self.treeWidget.setHeaderLabels(["ID", "Κωδικός", "Ημερομηνία", "Περιγραφή", "Ποιότητα", "Αποτέλεσμα", "Παρατηρήσεις"])
         self.treeWidget.header().setStyleSheet(u"background-color: gray;" "color: white;"
                                                "font-style: normal;font-size: 14pt;font-weight: bold;")
         self.treeWidget.setSelectionMode(QtWidgets.QAbstractItemView.ExtendedSelection)
-
         for index, item in enumerate(self.data_to_show):
             self.qitem = TreeWidgetItem(self.treeWidget,
                                         [str(item.ID), str(item.ΚΩΔΙΚΟΣ), item.ΗΜΕΡΟΜΗΝΙΑ, str(item.ΠΕΡΙΓΡΑΦΗ),
-                                         str(item.ΑΠΟΤΕΛΕΣΜΑ), item.ΠΑΡΑΤΗΡΗΣΕΙΣ])
+                                         str(item.ΠΟΙΟΤΗΤΑ), str(item.ΑΠΟΤΕΛΕΣΜΑ), item.ΠΑΡΑΤΗΡΗΣΕΙΣ])
             if "C/M/Y" in item.ΠΕΡΙΓΡΑΦΗ:
                 self.qitem.setBackground(3, QtGui.QColor('green'))
                 self.qitem.setForeground(3, QtGui.QColor('white'))
@@ -781,32 +786,31 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
                 # ΠΑΡΑΤΗΡΗΣΕΙΣ θα μας βγαλει δυο φορές το ιδιο προιόν στο treeWidget
                 # για αυτο κανουμε break το εσωτρεικό loop
                 # break
-            elif self.selected_table.__tablename__ == "XXX":
-                for index, item in enumerate(self.data_to_show):
-                    self.qitem = TreeWidgetItem(self.treeWidget,
-                                                [str(item.ID), str(item.ΚΩΔΙΚΟΣ), item.ΗΜΕΡΟΜΗΝΙΑ, str(item.ΠΕΡΙΓΡΑΦΗ),
-                                                 str(item.ΑΠΟΤΕΛΕΣΜΑ), item.ΠΑΡΑΤΗΡΗΣΕΙΣ])
-                    if "C/M/Y" in item.ΠΕΡΙΓΡΑΦΗ:
-                        self.qitem.setBackground(3, QtGui.QColor('green'))
-                        self.qitem.setForeground(3, QtGui.QColor('white'))
-                    elif "CYAN" in item.ΠΕΡΙΓΡΑΦΗ:
-                        self.qitem.setBackground(3, QtGui.QColor('#0517D2'))
-                        self.qitem.setForeground(3, QtGui.QColor('white'))
-                    elif "MAGENTA" in item.ΠΕΡΙΓΡΑΦΗ:
-                        self.qitem.setBackground(3, QtGui.QColor('#D205CF'))
-                        self.qitem.setForeground(3, QtGui.QColor('white'))
-                    elif "YELLOW" in item.ΠΕΡΙΓΡΑΦΗ:
-                        self.qitem.setBackground(3, QtGui.QColor('yellow'))
-                        self.qitem.setForeground(3, QtGui.QColor('black'))
-                    elif "GRAY" in item.ΠΕΡΙΓΡΑΦΗ:
-                        self.qitem.setBackground(3, QtGui.QColor("gray"))
-                        self.qitem.setForeground(3, QtGui.QColor('white'))
-                    elif "BLACK" in item.ΠΕΡΙΓΡΑΦΗ:
-                        self.qitem.setBackground(3, QtGui.QColor("black"))
-                        self.qitem.setForeground(3, QtGui.QColor('white'))
-                    self.qitem.setTextAlignment(4, QtCore.Qt.AlignCenter)
-                    self.treeWidget.setStyleSheet("QTreeView::item { padding: 10px }")
-                    self.treeWidget.addTopLevelItem(self.qitem)
+            elif self.selected_table.__tablename__ == "ΧΧΧ":
+                self.qitem = TreeWidgetItem(self.treeWidget,
+                                            [str(item.ID), str(item.ΚΩΔΙΚΟΣ), item.ΗΜΕΡΟΜΗΝΙΑ,
+                                             str(item.ΠΕΡΙΓΡΑΦΗ), str(item.ΠΟΙΟΤΗΤΑ), str(item.ΑΠΟΤΕΛΕΣΜΑ), item.ΠΑΡΑΤΗΡΗΣΕΙΣ])
+                if "C/M/Y" in item.ΠΕΡΙΓΡΑΦΗ:
+                    self.qitem.setBackground(3, QtGui.QColor('green'))
+                    self.qitem.setForeground(3, QtGui.QColor('white'))
+                elif "CYAN" in item.ΠΕΡΙΓΡΑΦΗ:
+                    self.qitem.setBackground(3, QtGui.QColor('#0517D2'))
+                    self.qitem.setForeground(3, QtGui.QColor('white'))
+                elif "MAGENTA" in item.ΠΕΡΙΓΡΑΦΗ:
+                    self.qitem.setBackground(3, QtGui.QColor('#D205CF'))
+                    self.qitem.setForeground(3, QtGui.QColor('white'))
+                elif "YELLOW" in item.ΠΕΡΙΓΡΑΦΗ:
+                    self.qitem.setBackground(3, QtGui.QColor('yellow'))
+                    self.qitem.setForeground(3, QtGui.QColor('black'))
+                elif "GRAY" in item.ΠΕΡΙΓΡΑΦΗ:
+                    self.qitem.setBackground(3, QtGui.QColor("gray"))
+                    self.qitem.setForeground(3, QtGui.QColor('white'))
+                elif "BLACK" in item.ΠΕΡΙΓΡΑΦΗ:
+                    self.qitem.setBackground(3, QtGui.QColor("black"))
+                    self.qitem.setForeground(3, QtGui.QColor('white'))
+                self.qitem.setTextAlignment(4, QtCore.Qt.AlignCenter)
+                self.treeWidget.setStyleSheet("QTreeView::item { padding: 10px }")
+                self.treeWidget.addTopLevelItem(self.qitem)
                 self.treeWidget.setColumnWidth(3, 500)
                 # self.treeWidget.itemDoubleClicked.connect(self.show_edit_orders_window)
             else:
@@ -817,7 +821,7 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
                 self.treeWidget.addTopLevelItem(self.qitem)
                 self.treeWidget.setColumnWidth(2, 500)
                 self.treeWidget.resizeColumnToContents(index)
-                # Για να μήν ψάχνει το ιδιο string στα επομενα πεδια του ιδου προιόντος
+                # Για να μήν ψάχνει το ίδιο string στα επόμενα πεδία του ιδίου προϊόντος
                 # πχ αν βρει την λεξει "brother" στο πεδιο ΠΕΡΙΓΡΑΦΗ αν το αφήσουμε να ψαξει και στις
                 # ΠΑΡΑΤΗΡΗΣΕΙΣ θα μας βγαλει δυο φορές το ιδιο προιόν στο treeWidget
                 # για αυτο κανουμε break το εσωτρεικό loop
@@ -1046,7 +1050,7 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
             for order in all_orders:
                 session.delete(order)
             session.commit()
-            QtWidgets.QMessageBox.information(None, 'Πληροφορία', f"Ολες οι παραγγελίες διαγράφηκαν!")
+            QtWidgets.QMessageBox.information(None, 'Πληροφορία', f"Όλες οι παραγγελίες διαγράφηκαν!")
             self.show_orders(self.selected_table)
 
     def delete_selected_orders(self):
@@ -1054,15 +1058,26 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
         items_ids = []
         for item in items:
             items_ids.append(item.text(0))  # item.text(0) ==> ID
-        answer = QtWidgets.QMessageBox.warning(None, 'Προσοχή!', f"Σίγουρα θέλετε να διαγράψετε αύτες τις παραγγελίες;",
+        answer = QtWidgets.QMessageBox.warning(None, 'Προσοχή!', f"Σίγουρα θέλετε να διαγράψετε αυτές τις παραγγελίες;",
                                                QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No,
                                                QtWidgets.QMessageBox.No)
         if answer == QtWidgets.QMessageBox.Yes:
 
             for item_id in items_ids:
-                item_to_delete = session.query(Orders).get(item_id)
+                item_to_delete = session.get(Orders, item_id)
                 session.delete(item_to_delete)
+
+                # Διαγράφει αρχείων απο προϊόντα που δεν είναι στην αποθήκη
+                # shutil.rmtree(path, ignore_errors=False, onerror=None,  dir_fd=None)
+                try:
+                    self.images_path = os.path.abspath(os.path.join(BASE_PATH, f"2.  ΑΠΟΘΗΚΗ\\SpareParts_images\\ΧΧΧ\\{item_id}"))
+                    shutil.rmtree(str(self.images_path), ignore_errors=True, onerror=None, dir_fd=None)
+                    self.images_path = None
+                except Exception as error:
+                    QtWidgets.QMessageBox.critical(None, 'Προσοχή', f"Δεν διαγράφτηκαν τα αρχεία απο το {self.images_path}!\n{error}")
+
             session.commit()
+
             QtWidgets.QMessageBox.information(None, 'Πληροφορία', f"Oι παραγγελίες διαγράφηκαν!")
             self.show_orders(self.selected_table)
 
@@ -1129,8 +1144,8 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
                 self.new_order = Ui_edit_orders_window()
                 self.new_order.setupUi(self.new_orders_window)  # Αρχικοποιηση των κουμπιων, γραμμων επεξεργασίας κτλπ
                 self.new_order.selected_table = self.selected_table
-                self.new_order.hide_buttons()  # Αποκρυψη κουμπιών αρχείου
-                # self.edit_orders.show_file()  # Εμφάνηση Αρχείων
+                self.new_order.hide_buttons()  # Απόκρυψη κουμπιών αρχείου
+                # self.edit_orders.show_file()  # Εμφάνιση Αρχείων
                 self.new_order.window = self.new_orders_window
                 self.new_orders_window.show()
                 self.new_order.window_closed.connect(self.new_refresh_orders)
@@ -1268,7 +1283,7 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
                                                    QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No,
                                                    QtWidgets.QMessageBox.No)
             if answer == QtWidgets.QMessageBox.Yes:
-                item_to_delete = session.query(self.selected_table).get(item_id)
+                item_to_delete = session.get(self.selected_table, item_id)
                 session.delete(item_to_delete)
                 session.commit()
                 QtWidgets.QMessageBox.information(None, 'Πληροφορία', f"O κωδικός {item[0].text(5)}\n"
@@ -1286,7 +1301,7 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
                                                    QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No,
                                                    QtWidgets.QMessageBox.No)
             if answer == QtWidgets.QMessageBox.Yes:
-                item_to_delete = session.query(self.selected_table).get(item_id)
+                item_to_delete = session.get(self.selected_table, item_id)
                 session.delete(item_to_delete)
                 session.commit()
                 QtWidgets.QMessageBox.information(None, 'Πληροφορία', f"O κωδικός {item[0].text(5)}\n"
@@ -1303,12 +1318,13 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
                                                    QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No,
                                                    QtWidgets.QMessageBox.No)
             if answer == QtWidgets.QMessageBox.Yes:
-                item_to_delete = session.query(self.selected_table).get(item_id)
+                item_to_delete = session.get(self.selected_table, item_id)
                 session.delete(item_to_delete)
                 session.commit()
                 QtWidgets.QMessageBox.information(None, 'Πληροφορία', f"O κωδικός {item[0].text(1)}\n"
                                                                       f" διαγράφηκε!"
-                                                                      f"απο τον πίνακα {self.selected_table_label.text()}")
+                                                                      f"απο τον πίνακα {self.selected_table_label.text()} και τα αρχεία")
+
             self.show_orders(self.selected_table)
 
         else:
@@ -1321,7 +1337,7 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
                                                    QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No,
                                                    QtWidgets.QMessageBox.No)
             if answer == QtWidgets.QMessageBox.Yes:
-                item_to_delete = session.query(self.selected_table).get(item_id)
+                item_to_delete = session.get(self.selected_table, item_id)
                 session.delete(item_to_delete)
                 session.commit()
                 QtWidgets.QMessageBox.information(None, 'Πληροφορία', f"O κωδικός {item[0].text(3)}\n"

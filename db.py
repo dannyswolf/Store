@@ -42,7 +42,7 @@ class Brother(base):
 
     def __repr__(self):
         return "<Brother(id='%i', PARTS_NR='%s', ΠΕΡΙΓΡΑΦΗ='%s', ΚΩΔΙΚΟΣ='%s', ΤΕΜΑΧΙΑ='%s', ΠΑΡΑΤΗΡΗΣΗΣ='%s')>" \
-               % (self.ID, self.PARTS_NR, self.ΠΕΡΙΓΡΑΦΗ, self.ΚΩΔΙΚΟΣ, self.ΤΕΜΑΧΙΑ, self.ΠΑΡΑΤΗΡΗΣΗΣ)
+            % (self.ID, self.PARTS_NR, self.ΠΕΡΙΓΡΑΦΗ, self.ΚΩΔΙΚΟΣ, self.ΤΕΜΑΧΙΑ, self.ΠΑΡΑΤΗΡΗΣΗΣ)
 
     def __str__(self):
         return f"{self.PARTS_NR} {self.ΠΕΡΙΓΡΑΦΗ} {self.ΚΩΔΙΚΟΣ} {self.ΤΕΜΑΧΙΑ} {self.ΠΑΡΑΤΗΡΗΣΗΣ}"
@@ -61,7 +61,7 @@ class Canon(base):
 
     def __repr__(self):
         return "<Canon(id='%i', PARTS_NR='%s', ΠΕΡΙΓΡΑΦΗ='%s', ΚΩΔΙΚΟΣ='%s', ΤΕΜΑΧΙΑ='%s', ΠΑΡΑΤΗΡΗΣΗΣ='%s')>" \
-               % (self.ID, self.PARTS_NR, self.ΠΕΡΙΓΡΑΦΗ, self.ΚΩΔΙΚΟΣ, self.ΤΕΜΑΧΙΑ, self.ΠΑΡΑΤΗΡΗΣΗΣ)
+            % (self.ID, self.PARTS_NR, self.ΠΕΡΙΓΡΑΦΗ, self.ΚΩΔΙΚΟΣ, self.ΤΕΜΑΧΙΑ, self.ΠΑΡΑΤΗΡΗΣΗΣ)
 
     def __str__(self):
         return f"{self.PARTS_NR} {self.ΠΕΡΙΓΡΑΦΗ} {self.ΚΩΔΙΚΟΣ} {self.ΤΕΜΑΧΙΑ} {self.ΠΑΡΑΤΗΡΗΣΗΣ}"
@@ -80,7 +80,7 @@ class Epson(base):
 
     def __repr__(self):
         return "<Epson(id='%i', PARTS_NR='%s', ΠΕΡΙΓΡΑΦΗ='%s', ΚΩΔΙΚΟΣ='%s', ΤΕΜΑΧΙΑ='%s', ΠΑΡΑΤΗΡΗΣΗΣ='%s')>" \
-               % (self.ID, self.PARTS_NR, self.ΠΕΡΙΓΡΑΦΗ, self.ΚΩΔΙΚΟΣ, self.ΤΕΜΑΧΙΑ, self.ΠΑΡΑΤΗΡΗΣΗΣ)
+            % (self.ID, self.PARTS_NR, self.ΠΕΡΙΓΡΑΦΗ, self.ΚΩΔΙΚΟΣ, self.ΤΕΜΑΧΙΑ, self.ΠΑΡΑΤΗΡΗΣΗΣ)
 
     def __str__(self):
         return f"{self.PARTS_NR} {self.ΠΕΡΙΓΡΑΦΗ} {self.ΚΩΔΙΚΟΣ} {self.ΤΕΜΑΧΙΑ} {self.ΠΑΡΑΤΗΡΗΣΗΣ}"
@@ -99,7 +99,7 @@ class Konica(base):
 
     def __repr__(self):
         return "<Konica(id='%i', PARTS_NR='%s', ΠΕΡΙΓΡΑΦΗ='%s', ΚΩΔΙΚΟΣ='%s', ΤΕΜΑΧΙΑ='%s', ΠΑΡΑΤΗΡΗΣΗΣ='%s')>" \
-               % (self.ID, self.PARTS_NR, self.ΠΕΡΙΓΡΑΦΗ, self.ΚΩΔΙΚΟΣ, self.ΤΕΜΑΧΙΑ, self.ΠΑΡΑΤΗΡΗΣΗΣ)
+            % (self.ID, self.PARTS_NR, self.ΠΕΡΙΓΡΑΦΗ, self.ΚΩΔΙΚΟΣ, self.ΤΕΜΑΧΙΑ, self.ΠΑΡΑΤΗΡΗΣΗΣ)
 
     def __str__(self):
         return f"{self.PARTS_NR} {self.ΠΕΡΙΓΡΑΦΗ} {self.ΚΩΔΙΚΟΣ} {self.ΤΕΜΑΧΙΑ} {self.ΠΑΡΑΤΗΡΗΣΗΣ}"
@@ -118,7 +118,7 @@ class Kyocera(base):
 
     def __repr__(self):
         return "<Kyocera(id='%i', PARTS_NR='%s', ΠΕΡΙΓΡΑΦΗ='%s', ΚΩΔΙΚΟΣ='%s', ΤΕΜΑΧΙΑ='%s', ΠΑΡΑΤΗΡΗΣΗΣ='%s')>" \
-               % (self.ID, self.PARTS_NR, self.ΠΕΡΙΓΡΑΦΗ, self.ΚΩΔΙΚΟΣ, self.ΤΕΜΑΧΙΑ, self.ΠΑΡΑΤΗΡΗΣΗΣ)
+            % (self.ID, self.PARTS_NR, self.ΠΕΡΙΓΡΑΦΗ, self.ΚΩΔΙΚΟΣ, self.ΤΕΜΑΧΙΑ, self.ΠΑΡΑΤΗΡΗΣΗΣ)
 
     def __str__(self):
         return f"{self.PARTS_NR} {self.ΠΕΡΙΓΡΑΦΗ} {self.ΚΩΔΙΚΟΣ} {self.ΤΕΜΑΧΙΑ} {self.ΠΑΡΑΤΗΡΗΣΗΣ}"
@@ -137,7 +137,7 @@ class Lexmark(base):
 
     def __repr__(self):
         return "<Lexmark(id='%i', PARTS_NR='%s', ΠΕΡΙΓΡΑΦΗ='%s', ΚΩΔΙΚΟΣ='%s', ΤΕΜΑΧΙΑ='%s', ΠΑΡΑΤΗΡΗΣΗΣ='%s')>" \
-               % (self.ID, self.PARTS_NR, self.ΠΕΡΙΓΡΑΦΗ, self.ΚΩΔΙΚΟΣ, self.ΤΕΜΑΧΙΑ, self.ΠΑΡΑΤΗΡΗΣΗΣ)
+            % (self.ID, self.PARTS_NR, self.ΠΕΡΙΓΡΑΦΗ, self.ΚΩΔΙΚΟΣ, self.ΤΕΜΑΧΙΑ, self.ΠΑΡΑΤΗΡΗΣΗΣ)
 
     def __str__(self):
         return f"{self.PARTS_NR} {self.ΠΕΡΙΓΡΑΦΗ} {self.ΚΩΔΙΚΟΣ} {self.ΤΕΜΑΧΙΑ} {self.ΠΑΡΑΤΗΡΗΣΗΣ}"
@@ -156,7 +156,7 @@ class Oki(base):
 
     def __repr__(self):
         return "<Oki(id='%i', PARTS_NR='%s', ΠΕΡΙΓΡΑΦΗ='%s', ΚΩΔΙΚΟΣ='%s', ΤΕΜΑΧΙΑ='%s', ΠΑΡΑΤΗΡΗΣΗΣ='%s')>" \
-               % (self.ID, self.PARTS_NR, self.ΠΕΡΙΓΡΑΦΗ, self.ΚΩΔΙΚΟΣ, self.ΤΕΜΑΧΙΑ, self.ΠΑΡΑΤΗΡΗΣΗΣ)
+            % (self.ID, self.PARTS_NR, self.ΠΕΡΙΓΡΑΦΗ, self.ΚΩΔΙΚΟΣ, self.ΤΕΜΑΧΙΑ, self.ΠΑΡΑΤΗΡΗΣΗΣ)
 
     def __str__(self):
         return f"{self.PARTS_NR} {self.ΠΕΡΙΓΡΑΦΗ} {self.ΚΩΔΙΚΟΣ} {self.ΤΕΜΑΧΙΑ} {self.ΠΑΡΑΤΗΡΗΣΗΣ}"
@@ -175,7 +175,7 @@ class Ricoh(base):
 
     def __repr__(self):
         return "<Ricoh(id='%i', PARTS_NR='%s', ΠΕΡΙΓΡΑΦΗ='%s', ΚΩΔΙΚΟΣ='%s', ΤΕΜΑΧΙΑ='%s', ΠΑΡΑΤΗΡΗΣΗΣ='%s')>" \
-               % (self.ID, self.PARTS_NR, self.ΠΕΡΙΓΡΑΦΗ, self.ΚΩΔΙΚΟΣ, self.ΤΕΜΑΧΙΑ, self.ΠΑΡΑΤΗΡΗΣΗΣ)
+            % (self.ID, self.PARTS_NR, self.ΠΕΡΙΓΡΑΦΗ, self.ΚΩΔΙΚΟΣ, self.ΤΕΜΑΧΙΑ, self.ΠΑΡΑΤΗΡΗΣΗΣ)
 
     def __str__(self):
         return f"{self.PARTS_NR} {self.ΠΕΡΙΓΡΑΦΗ} {self.ΚΩΔΙΚΟΣ} {self.ΤΕΜΑΧΙΑ} {self.ΠΑΡΑΤΗΡΗΣΗΣ}"
@@ -194,7 +194,7 @@ class Samsung(base):
 
     def __repr__(self):
         return "<Samsung(id='%i', PARTS_NR='%s', ΠΕΡΙΓΡΑΦΗ='%s', ΚΩΔΙΚΟΣ='%s', ΤΕΜΑΧΙΑ='%s', ΠΑΡΑΤΗΡΗΣΗΣ='%s')>" \
-               % (self.ID, self.PARTS_NR, self.ΠΕΡΙΓΡΑΦΗ, self.ΚΩΔΙΚΟΣ, self.ΤΕΜΑΧΙΑ, self.ΠΑΡΑΤΗΡΗΣΗΣ)
+            % (self.ID, self.PARTS_NR, self.ΠΕΡΙΓΡΑΦΗ, self.ΚΩΔΙΚΟΣ, self.ΤΕΜΑΧΙΑ, self.ΠΑΡΑΤΗΡΗΣΗΣ)
 
     def __str__(self):
         return f"{self.PARTS_NR} {self.ΠΕΡΙΓΡΑΦΗ} {self.ΚΩΔΙΚΟΣ} {self.ΤΕΜΑΧΙΑ} {self.ΠΑΡΑΤΗΡΗΣΗΣ}"
@@ -213,7 +213,7 @@ class Sharp(base):
 
     def __repr__(self):
         return "<Sharp(id='%i', PARTS_NR='%s', ΠΕΡΙΓΡΑΦΗ='%s', ΚΩΔΙΚΟΣ='%s', ΤΕΜΑΧΙΑ='%s', ΠΑΡΑΤΗΡΗΣΗΣ='%s')>" \
-               % (self.ID, self.PARTS_NR, self.ΠΕΡΙΓΡΑΦΗ, self.ΚΩΔΙΚΟΣ, self.ΤΕΜΑΧΙΑ, self.ΠΑΡΑΤΗΡΗΣΗΣ)
+            % (self.ID, self.PARTS_NR, self.ΠΕΡΙΓΡΑΦΗ, self.ΚΩΔΙΚΟΣ, self.ΤΕΜΑΧΙΑ, self.ΠΑΡΑΤΗΡΗΣΗΣ)
 
     def __str__(self):
         return f"{self.PARTS_NR} {self.ΠΕΡΙΓΡΑΦΗ} {self.ΚΩΔΙΚΟΣ} {self.ΤΕΜΑΧΙΑ} {self.ΠΑΡΑΤΗΡΗΣΗΣ}"
@@ -239,8 +239,8 @@ class Melanakia(base):
     def __repr__(self):
         return "<Melanakia(id='%i', ΕΤΑΙΡΕΙΑ='%s', ΠΟΙΟΤΗΤΑ='%s', ΑΝΑΛΩΣΙΜΟ='%s', ΠΕΡΙΓΡΑΦΗ='%s', ΚΩΔΙΚΟΣ='%s' " \
                "ΤΕΜΑΧΙΑ='%s', ΤΙΜΗ='%s', ΣΥΝΟΛΟ='%s', ΣΕΛΙΔΕΣ='%s', ΠΕΛΑΤΕΣ='%s', ΠΑΡΑΤΗΡΗΣΗΣ='%s')>" \
-               % (self.ID, self.ΕΤΑΙΡΕΙΑ, self.ΠΟΙΟΤΗΤΑ, self.ΑΝΑΛΩΣΙΜΟ, self.ΠΕΡΙΓΡΑΦΗ, self.ΚΩΔΙΚΟΣ, self.ΤΕΜΑΧΙΑ,
-                  self.ΤΙΜΗ, self.ΣΥΝΟΛΟ, self.ΣΕΛΙΔΕΣ, self.ΠΕΛΑΤΕΣ, self.ΠΑΡΑΤΗΡΗΣΗΣ)
+            % (self.ID, self.ΕΤΑΙΡΕΙΑ, self.ΠΟΙΟΤΗΤΑ, self.ΑΝΑΛΩΣΙΜΟ, self.ΠΕΡΙΓΡΑΦΗ, self.ΚΩΔΙΚΟΣ, self.ΤΕΜΑΧΙΑ,
+               self.ΤΙΜΗ, self.ΣΥΝΟΛΟ, self.ΣΕΛΙΔΕΣ, self.ΠΕΛΑΤΕΣ, self.ΠΑΡΑΤΗΡΗΣΗΣ)
 
     def __str__(self):
         return f"{self.ΕΤΑΙΡΕΙΑ} {self.ΠΟΙΟΤΗΤΑ} {self.ΑΝΑΛΩΣΙΜΟ} {self.ΠΕΡΙΓΡΑΦΗ} {self.ΚΩΔΙΚΟΣ} {self.ΤΕΜΑΧΙΑ} " \
@@ -266,8 +266,8 @@ class Melanotainies(base):
     def __repr__(self):
         return "<Melanotainies(id='%i', ΕΤΑΙΡΕΙΑ='%s', ΠΟΙΟΤΗΤΑ='%s', ΑΝΑΛΩΣΙΜΟ='%s', ΠΕΡΙΓΡΑΦΗ='%s', ΚΩΔΙΚΟΣ='%s' " \
                "ΤΕΜΑΧΙΑ='%s', ΤΙΜΗ='%s', ΣΥΝΟΛΟ='%s', ΠΕΛΑΤΕΣ='%s', ΠΑΡΑΤΗΡΗΣΗΣ='%s')>" \
-               % (self.ID, self.ΕΤΑΙΡΕΙΑ, self.ΠΟΙΟΤΗΤΑ, self.ΑΝΑΛΩΣΙΜΟ, self.ΠΕΡΙΓΡΑΦΗ, self.ΚΩΔΙΚΟΣ, self.ΤΕΜΑΧΙΑ,
-                  self.ΤΙΜΗ, self.ΣΥΝΟΛΟ, self.ΠΕΛΑΤΕΣ, self.ΠΑΡΑΤΗΡΗΣΗΣ)
+            % (self.ID, self.ΕΤΑΙΡΕΙΑ, self.ΠΟΙΟΤΗΤΑ, self.ΑΝΑΛΩΣΙΜΟ, self.ΠΕΡΙΓΡΑΦΗ, self.ΚΩΔΙΚΟΣ, self.ΤΕΜΑΧΙΑ,
+               self.ΤΙΜΗ, self.ΣΥΝΟΛΟ, self.ΠΕΛΑΤΕΣ, self.ΠΑΡΑΤΗΡΗΣΗΣ)
 
     def __str__(self):
         return f"{self.ΕΤΑΙΡΕΙΑ} {self.ΠΟΙΟΤΗΤΑ} {self.ΑΝΑΛΩΣΙΜΟ} {self.ΠΕΡΙΓΡΑΦΗ} {self.ΚΩΔΙΚΟΣ} {self.ΤΕΜΑΧΙΑ} " \
@@ -294,8 +294,8 @@ class Toner(base):
     def __repr__(self):
         return "<Toner(id='%i', ΕΤΑΙΡΕΙΑ='%s', ΠΟΙΟΤΗΤΑ='%s', ΑΝΑΛΩΣΙΜΟ='%s', ΠΕΡΙΓΡΑΦΗ='%s', ΚΩΔΙΚΟΣ='%s' " \
                "ΤΕΜΑΧΙΑ='%s', ΤΙΜΗ='%s', ΣΥΝΟΛΟ='%s', ΣΕΛΙΔΕΣ='%s', ΠΕΛΑΤΕΣ='%s', ΠΑΡΑΤΗΡΗΣΗΣ='%s')>" \
-               % (self.ID, self.ΕΤΑΙΡΕΙΑ, self.ΠΟΙΟΤΗΤΑ, self.ΑΝΑΛΩΣΙΜΟ, self.ΠΕΡΙΓΡΑΦΗ, self.ΚΩΔΙΚΟΣ, self.ΤΕΜΑΧΙΑ,
-                  self.ΤΙΜΗ, self.ΣΥΝΟΛΟ, self.ΣΕΛΙΔΕΣ, self.ΠΕΛΑΤΕΣ, self.ΠΑΡΑΤΗΡΗΣΗΣ)
+            % (self.ID, self.ΕΤΑΙΡΕΙΑ, self.ΠΟΙΟΤΗΤΑ, self.ΑΝΑΛΩΣΙΜΟ, self.ΠΕΡΙΓΡΑΦΗ, self.ΚΩΔΙΚΟΣ, self.ΤΕΜΑΧΙΑ,
+               self.ΤΙΜΗ, self.ΣΥΝΟΛΟ, self.ΣΕΛΙΔΕΣ, self.ΠΕΛΑΤΕΣ, self.ΠΑΡΑΤΗΡΗΣΗΣ)
 
     def __str__(self):
         return f"{self.ΕΤΑΙΡΕΙΑ} {self.ΠΟΙΟΤΗΤΑ} {self.ΑΝΑΛΩΣΙΜΟ} {self.ΠΕΡΙΓΡΑΦΗ} {self.ΚΩΔΙΚΟΣ} {self.ΤΕΜΑΧΙΑ} " \
@@ -322,8 +322,8 @@ class Copiers(base):
     def __repr__(self):
         return "<Copiers(id='%i', ΕΤΑΙΡΕΙΑ='%s', ΠΟΙΟΤΗΤΑ='%s', ΑΝΑΛΩΣΙΜΟ='%s', ΠΕΡΙΓΡΑΦΗ='%s', ΚΩΔΙΚΟΣ='%s' " \
                "ΤΕΜΑΧΙΑ='%s', ΤΙΜΗ='%s', ΣΥΝΟΛΟ='%s', ΣΕΛΙΔΕΣ='%s', ΠΕΛΑΤΕΣ='%s', ΠΑΡΑΤΗΡΗΣΗΣ='%s')>" \
-               % (self.ID, self.ΕΤΑΙΡΕΙΑ, self.ΠΟΙΟΤΗΤΑ, self.ΑΝΑΛΩΣΙΜΟ, self.ΠΕΡΙΓΡΑΦΗ, self.ΚΩΔΙΚΟΣ, self.ΤΕΜΑΧΙΑ,
-                  self.ΤΙΜΗ, self.ΣΥΝΟΛΟ, self.ΣΕΛΙΔΕΣ, self.ΠΕΛΑΤΕΣ, self.ΠΑΡΑΤΗΡΗΣΗΣ)
+            % (self.ID, self.ΕΤΑΙΡΕΙΑ, self.ΠΟΙΟΤΗΤΑ, self.ΑΝΑΛΩΣΙΜΟ, self.ΠΕΡΙΓΡΑΦΗ, self.ΚΩΔΙΚΟΣ, self.ΤΕΜΑΧΙΑ,
+               self.ΤΙΜΗ, self.ΣΥΝΟΛΟ, self.ΣΕΛΙΔΕΣ, self.ΠΕΛΑΤΕΣ, self.ΠΑΡΑΤΗΡΗΣΗΣ)
 
     def __str__(self):
         return f"{self.ΕΤΑΙΡΕΙΑ} {self.ΠΟΙΟΤΗΤΑ} {self.ΑΝΑΛΩΣΙΜΟ} {self.ΠΕΡΙΓΡΑΦΗ} {self.ΚΩΔΙΚΟΣ} {self.ΤΕΜΑΧΙΑ} " \
@@ -338,6 +338,7 @@ class Orders(base):
     ΚΩΔΙΚΟΣ = Column(Text)
     ΗΜΕΡΟΜΗΝΙΑ = Column(Text)
     ΠΕΡΙΓΡΑΦΗ = Column(Text)
+    ΠΟΙΟΤΗΤΑ = Column(Text)
     ΑΠΟΤΕΛΕΣΜΑ = Column(Text)
     ΠΑΡΑΤΗΡΗΣΕΙΣ = Column(Text)
     images = Column(Text)
@@ -345,13 +346,13 @@ class Orders(base):
     # image = Column(Text)
 
     def __repr__(self):
-        return "<Orders(id='%i', ΚΩΔΙΚΟΣ='%s', ΗΜΕΡΟΜΗΝΙΑ='%s', ΠΕΡΙΓΡΑΦΗ='%s', ΑΠΟΤΕΛΕΣΜΑ='%s', ΠΑΡΑΤΗΡΗΣΕΙΣ='%s'\
-        images='%s')>" \
-               % (
-               self.ID, self.ΚΩΔΙΚΟΣ, self.ΗΜΕΡΟΜΗΝΙΑ, self.ΠΕΡΙΓΡΑΦΗ, self.ΑΠΟΤΕΛΕΣΜΑ, self.ΠΑΡΑΤΗΡΗΣΕΙΣ, self.images)
+        return ("<Orders(id='%i', ΚΩΔΙΚΟΣ='%s', ΗΜΕΡΟΜΗΝΙΑ='%s', ΠΕΡΙΓΡΑΦΗ='%s', ΠΟΙΟΤΗΤΑ='%s', ΑΠΟΤΕΛΕΣΜΑ='%s', "
+                "ΠΑΡΑΤΗΡΗΣΕΙΣ='%s'\ images='%s')>") \
+            % (
+                self.ID, self.ΚΩΔΙΚΟΣ, self.ΗΜΕΡΟΜΗΝΙΑ, self.ΠΕΡΙΓΡΑΦΗ, self.ΠΟΙΟΤΗΤΑ, self.ΑΠΟΤΕΛΕΣΜΑ, self.ΠΑΡΑΤΗΡΗΣΕΙΣ, self.images)
 
     def __str__(self):
-        return f"{self.ΚΩΔΙΚΟΣ} {self.ΗΜΕΡΟΜΗΝΙΑ} {self.ΠΕΡΙΓΡΑΦΗ} {self.ΑΠΟΤΕΛΕΣΜΑ} {self.ΠΑΡΑΤΗΡΗΣΕΙΣ} {self.images}"
+        return f"{self.ΚΩΔΙΚΟΣ} {self.ΗΜΕΡΟΜΗΝΙΑ} {self.ΠΕΡΙΓΡΑΦΗ} {self.ΠΟΙΟΤΗΤΑ} {self.ΑΠΟΤΕΛΕΣΜΑ} {self.ΠΑΡΑΤΗΡΗΣΕΙΣ} {self.images}"
 
 
 def search_on_spare_parts(table, text_to_search):

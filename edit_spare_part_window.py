@@ -282,11 +282,11 @@ class Ui_edit_spare_parts_window(QMainWindow):  # Πρέπει να κληρον
         #     edit_spare_parts_window.setWindowTitle(_translate("edit_spare_parts_window", "Προσθήκη ανταλλακτικού"))
         # else:
         #     edit_spare_parts_window.setWindowTitle(_translate("edit_spare_parts_window", "Επεξεργασία ανταλλακτικού"))
-        self.previous_btn.setText(_translate("edit_spare_parts_window", "Προηγούμενη"))
-        self.next_btn.setText(_translate("edit_spare_parts_window", "Επόμενη"))
+        self.previous_btn.setText(_translate("edit_spare_parts_window", "Προηγούμενο"))
+        self.next_btn.setText(_translate("edit_spare_parts_window", "Επόμενο"))
         self.comments_label.setText(_translate("edit_spare_parts_window", "Σχόλια"))
         self.save_file_btn.setText(_translate("edit_spare_parts_window", "Αποθήκευση αρχείου"))
-        self.open_pdf_file_btn.setText(_translate("edit_spare_parts_window", "Ανοιγμα αρχείου pdf"))
+        self.open_pdf_file_btn.setText(_translate("edit_spare_parts_window", "Άνοιγμα αρχείου pdf"))
         self.pieces_label.setText(_translate("edit_spare_parts_window", "Τεμάχια"))
         self.orders_btn.setText(_translate("edit_spare_parts_window", "Προσθήκη στις παραγγελίες"))
         self.description_label.setText(_translate("edit_spare_parts_window", "Περιγραφή"))
@@ -381,7 +381,7 @@ class Ui_edit_spare_parts_window(QMainWindow):  # Πρέπει να κληρον
     def send_to_orders(self):
         try:
             if not session.query(exists().where(Orders.ΚΩΔΙΚΟΣ == self.item.ΚΩΔΙΚΟΣ)).scalar():
-                new_order = Orders(ΚΩΔΙΚΟΣ=self.item.ΚΩΔΙΚΟΣ, ΗΜΕΡΟΜΗΝΙΑ=today, ΠΕΡΙΓΡΑΦΗ=self.item.ΠΕΡΙΓΡΑΦΗ,
+                new_order = Orders(ΚΩΔΙΚΟΣ=self.item.ΚΩΔΙΚΟΣ, ΠΟΙΟΤΗΤΑ="", ΗΜΕΡΟΜΗΝΙΑ=today, ΠΕΡΙΓΡΑΦΗ=self.item.ΠΕΡΙΓΡΑΦΗ,
                                    ΑΠΟΤΕΛΕΣΜΑ="", images=self.images_path)
                 session.add(new_order)
                 session.commit()
