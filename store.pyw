@@ -33,10 +33,10 @@
 
 import time
 # Database
-from db import get_spare_parts, DB, select, conn, Orders, search_on_spare_parts, search_on_consumables, search_on_orders
+from db import get_spare_parts, DB, select, conn, search_on_spare_parts, search_on_consumables, search_on_orders
 
 # Settings
-from settings import VERSION, today, root_logger, BASE_PATH
+from settings import VERSION, today, BASE_PATH
 
 # PyQt5
 from PyQt5 import QtCore, QtGui, QtWidgets
@@ -67,9 +67,6 @@ import re
 
 # --------------Log Files----------------------
 import traceback
-# log_format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-# sys.stderr.write = root_logger.error
-# sys.stdout.write = root_logger.info
 
 
 # Κανουμε sub class το QTreeWidgetItem για να κανει sort τους αριθμους που ειναι σε string μορφη
@@ -595,7 +592,6 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
         self.selected_table = table
         self.btn_grp.buttonClicked.connect(self.change_colors_of_pressed_btn)  # αλλαγή χρώματος
         self.data_to_show = get_spare_parts(table)
-
         self.selected_table_label.setText(f"{table.__tablename__}")
         self.search_line_edit.show()
         self.search_btn.show()

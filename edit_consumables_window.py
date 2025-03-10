@@ -12,7 +12,7 @@ import subprocess
 import os
 import shutil
 import pathlib  # Για αποθήκευση αρχείου να πάρουμε μόνο την κατάληξει .svg.png
-from settings import today, root_logger, SPARE_PARTS_ROOT
+from settings import today,  SPARE_PARTS_ROOT
 import sqlalchemy
 from sqlalchemy.sql import exists
 import traceback
@@ -20,9 +20,7 @@ from db import Melanakia, Toner, Copiers, Orders, session
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 # --------------Log Files----------------------
-# log_format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-sys.stderr.write = root_logger.error
-sys.stdout.write = root_logger.info
+
 
 
 class Ui_edit_consumables_window(QtWidgets.QMainWindow):   # Πρέπει να κληρονομήσει απο QMainWindow for pyqtSignal to work
@@ -348,7 +346,7 @@ class Ui_edit_consumables_window(QtWidgets.QMainWindow):   # Πρέπει να �
 
     def edit_consumable(self):
         """
-        Αυτή η συνάρτηση καλείτε απο το store.py
+        Αυτή η συνάρτηση καλείτε απο το store.pyw
         Εμφανίζει τα δεδομένα που παίρνει απο τη βάση δεδομένων στις σωστές θέσης για επεξεργασία
         :return: 0
         """
@@ -372,7 +370,7 @@ class Ui_edit_consumables_window(QtWidgets.QMainWindow):   # Πρέπει να �
         if os.path.exists(self.images_path):
             self.files = os.listdir(self.images_path)
 
-    def show_file(self):  # Εμφάνησει πρώτου αρχείου όταν ανοιγει το παράθυρο η συνάρτηση καλειτε απο το store.py
+    def show_file(self):  # Εμφάνησει πρώτου αρχείου όταν ανοιγει το παράθυρο η συνάρτηση καλειτε απο το store.pyw
         try:
 
             if self.files[0]:  # αν δεν υπάρχει βγαζει IndexError:  δλδ δεν υπάρχει αχρείο
@@ -418,7 +416,7 @@ class Ui_edit_consumables_window(QtWidgets.QMainWindow):   # Πρέπει να �
                 # self.save_file_btn.show()
                 self.delete_file_btn.show()
         except (IndexError, TypeError):  # αν δεν υπάρχει κανένα αρχείο
-            # NoneType οταν ξεκοιναει απο το store.py το self.files = None
+            # NoneType οταν ξεκοιναει απο το store.pyw το self.files = None
             # απόκρηψη κουμπιών
             self.image_label.hide()
             self.next_btn.hide()
